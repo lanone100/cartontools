@@ -143,32 +143,28 @@ body::before {
    HERO HEADER
 ═══════════════════════════════════════════ */
 .hero {
-  padding: 52px 0 28px;
+  padding: 28px 0 18px;
   text-align: center;
   position: relative;
 }
 .hero-icon {
-  font-size: 52px;
+  font-size: 1em;
   line-height: 1;
-  margin-bottom: 14px;
-  display: block;
-  filter: drop-shadow(0 4px 12px rgba(255,107,43,.4));
-  animation: floatIcon 4s ease-in-out infinite;
-}
-@keyframes floatIcon {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
+  display: inline;
+  vertical-align: middle;
+  margin-right: 6px;
+  filter: drop-shadow(0 2px 6px rgba(255,107,43,.35));
 }
 .hero-title {
-  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  font-size: clamp(1.45rem, 5.5vw, 2.1rem);
   font-weight: 800;
   letter-spacing: -.03em;
-  line-height: 1.1;
+  line-height: 1.15;
   background: linear-gradient(135deg, var(--orange) 0%, var(--gold) 50%, var(--orange-soft) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 .hero-sub {
   font-size: .82rem;
@@ -569,7 +565,7 @@ select {
 ═══════════════════════════════════════════ */
 @media (min-width: 560px) {
   .wrap { padding: 0 20px; }
-  .hero { padding: 64px 0 32px; }
+  .hero { padding: 40px 0 22px; }
   .card { padding: 26px 24px; border-radius: 32px; }
   .ig { gap: 12px; }
   .ig.ig3 { grid-template-columns: 1fr 1fr 1fr; }
@@ -584,7 +580,7 @@ select {
 }
 @media (max-width: 559px) {
   .seg-wrap { display: none; }
-  .hero { padding: 44px 0 20px; }
+  .hero { padding: 28px 0 14px; }
 }
 </style>
 </head>
@@ -600,8 +596,7 @@ select {
 
   <!-- Hero -->
   <div class="hero">
-    <span class="hero-icon">📦</span>
-    <h1 class="hero-title">瓦楞紙箱計算器</h1>
+    <h1 class="hero-title"><span class="hero-icon">📦</span>瓦楞紙箱計算器</h1>
     <p class="hero-sub">CORRUGATED BOX CALCULATOR · zh-TW</p>
   </div>
 
