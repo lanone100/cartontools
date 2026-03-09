@@ -112,9 +112,7 @@
             line-height: 1;
         }
 
-        .theme-toggle:hover {
-            transform: scale(1.02);
-        }
+        .theme-toggle:hover { transform: scale(1.02); }
 
         .tab-bar {
             display: flex;
@@ -197,9 +195,7 @@
             border-bottom: 1px solid var(--border-light);
             color: var(--text-secondary);
         }
-        tr:last-child td {
-            border-bottom: none;
-        }
+        tr:last-child td { border-bottom: none; }
         td:first-child {
             font-weight: 500;
             color: var(--text-primary);
@@ -232,18 +228,14 @@
             gap: 16px;
             margin-bottom: 20px;
         }
-        .input-group {
-            flex: 1 1 180px;
-        }
+        .input-group { flex: 1 1 180px; }
         .input-group label {
             display: block;
             font-size: 14px;
             margin-bottom: 6px;
             color: var(--text-secondary);
         }
-        .input-wrapper {
-            position: relative;
-        }
+        .input-wrapper { position: relative; }
         input, select {
             width: 100%;
             padding: 14px 16px;
@@ -291,9 +283,7 @@
             background: transparent;
             word-break: break-word;
         }
-        .result-table tr:last-child td {
-            border-bottom: none;
-        }
+        .result-table tr:last-child td { border-bottom: none; }
         .result-table td:first-child {
             font-weight: 500;
             color: var(--text-secondary);
@@ -344,11 +334,20 @@
             margin-bottom: 4px;
         }
 
-        .page {
-            display: none;
-        }
-        .page.active {
-            display: block;
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* Bug fix badge */
+        .badge {
+            display: inline-block;
+            background: var(--accent-green);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
+            vertical-align: middle;
+            margin-left: 6px;
         }
 
         @media (max-width: 600px) {
@@ -389,15 +388,15 @@
 
             <div class="input-row">
                 <div class="input-group" style="flex:2;">
-                    <label>📋 楞型選擇</label>
+                    <label>📋 楞型選擇（自動填入楞型厚度）</label>
                     <div class="input-wrapper">
                         <select id="fluteSelect">
-                            <option value="" selected>⚙️ 自定義 (手動)</option>
-                            <option value="5">A楞 (5mm) 緩衝佳</option>
-                            <option value="3">B楞 (3mm) 強度高</option>
-                            <option value="4">C楞 (4mm) 通用</option>
-                            <option value="1.5">E楞 (1.5mm) 彩盒</option>
-                            <option value="1">F/G楞 (<1mm) 精細</option>
+                            <option value="" selected>⚙️ 自定義 (手動輸入)</option>
+                            <option value="5|2">A楞 (5mm) 緩衝佳</option>
+                            <option value="3|1">B楞 (3mm) 強度高</option>
+                            <option value="4|1.5">C楞 (4mm) 通用</option>
+                            <option value="1.5|1">E楞 (1.5mm) 彩盒</option>
+                            <option value="1|0.5">F/G楞 (&lt;1mm) 精細</option>
                         </select>
                     </div>
                 </div>
@@ -412,34 +411,35 @@
             <div class="input-row">
                 <div class="input-group">
                     <label>外長 L (cm)</label>
-                    <div class="input-wrapper"><input type="number" id="outL" value="40" step="0.1"><span class="unit">cm</span></div>
+                    <div class="input-wrapper"><input type="number" id="outL" value="40" step="0.1" min="0"><span class="unit">cm</span></div>
                 </div>
                 <div class="input-group">
                     <label>外寬 W (cm)</label>
-                    <div class="input-wrapper"><input type="number" id="outW" value="30" step="0.1"><span class="unit">cm</span></div>
+                    <div class="input-wrapper"><input type="number" id="outW" value="30" step="0.1" min="0"><span class="unit">cm</span></div>
                 </div>
                 <div class="input-group">
                     <label>外高 H (cm)</label>
-                    <div class="input-wrapper"><input type="number" id="outH" value="25" step="0.1"><span class="unit">cm</span></div>
+                    <div class="input-wrapper"><input type="number" id="outH" value="25" step="0.1" min="0"><span class="unit">cm</span></div>
                 </div>
                 <div class="input-group">
                     <label>釘接邊 (cm)</label>
-                    <div class="input-wrapper"><input type="number" id="stitch" value="4" step="0.1"><span class="unit">cm</span></div>
+                    <div class="input-wrapper"><input type="number" id="stitch" value="4" step="0.1" min="0"><span class="unit">cm</span></div>
                 </div>
             </div>
 
             <div class="input-row">
                 <div class="input-group">
-                    <label>紙板厚度 (mm) <span style="font-size:12px;">(五層常用7)</span></label>
-                    <div class="input-wrapper"><input type="number" id="boardThick" value="7" step="0.1"><span class="unit">mm</span></div>
+                    <!-- BUG FIX: 楞型厚度（如A楞=5mm），改名更清楚 -->
+                    <label>楞高（楞型厚度）(mm) <span style="font-size:12px;">A楞5 / B楞3 / C楞4</span></label>
+                    <div class="input-wrapper"><input type="number" id="boardThick" value="7" step="0.1" min="0"><span class="unit">mm</span></div>
                 </div>
                 <div class="input-group">
-                    <label>紙層厚度 (mm) <span style="font-size:12px;">(五層2, 三層1)</span></label>
-                    <div class="input-wrapper"><input type="number" id="layerThick" value="2" step="0.1"><span class="unit">mm</span></div>
+                    <label>面紙厚度 (mm) <span style="font-size:12px;">三層≈1 / 五層≈2</span></label>
+                    <div class="input-wrapper"><input type="number" id="layerThick" value="2" step="0.1" min="0"><span class="unit">mm</span></div>
                 </div>
                 <div class="input-group">
                     <label>每平方米單價 (NT$)</label>
-                    <div class="input-wrapper"><input type="number" id="price" value="3.5" step="0.1"><span class="unit">NT$</span></div>
+                    <div class="input-wrapper"><input type="number" id="price" value="3.5" step="0.1" min="0"><span class="unit">NT$</span></div>
                 </div>
             </div>
 
@@ -448,31 +448,33 @@
                 <tr><td>📐 製造尺寸 (L×W×H)</td><td id="manuDim">--</td></tr>
                 <tr><td>📦 外尺寸 (L×W×H)</td><td id="outerDim">--</td></tr>
                 <tr><td>📐 展開長 × 展開寬</td><td id="flatDim">--</td></tr>
-                <tr><td>🧮 才數</td><td id="talentVal">--</td></tr>
+                <!-- BUG FIX: 才數公式改正，展開寬 = (W+H)×2 -->
+                <tr><td>🧮 才數 <span style="font-size:0.75rem;color:var(--text-tertiary);">(展開長×展開寬÷918)</span></td><td id="talentVal">--</td></tr>
                 <tr><td>📏 紙箱面積 (㎡)</td><td id="areaVal">--</td></tr>
                 <tr class="cost-row"><td>💰 每箱成本 (NT$)</td><td id="costVal">--</td></tr>
             </table>
 
             <div class="note">
-                <strong>📌 計算說明：</strong><br>
-                內尺寸 = 外尺寸 - 紙層厚度 - 紙板厚度 (長/寬)；內高 = 外高 - 2×(紙層厚度+紙板厚度)<br>
-                製造尺寸 = 內尺寸 + 紙板厚度 (長/寬)；製造高 = 內高 + 2×紙板厚度<br>
-                展開長 = (外長+外寬)×2 + 釘接邊；展開寬 = 外寬 + 外高；才數 = (展開長×展開寬)/918<br>
-                面積 = [(外長+外寬)×2/100 + 0.04] × (外寬/100 + 外高/100 + 0.05) （單位轉為米）<br>
-                <span style="color: var(--accent-green);">成本 = 面積 × 每平方米單價，顯示於最後一行（綠色高亮）</span>
+                <strong>📌 計算說明（已修正）：</strong><br>
+                <strong>紙板總厚度</strong> = 楞高 + 面紙厚度×2（三層）或 楞高×2 + 面紙厚度×3（五層）<br>
+                內尺寸 = 外尺寸 − 面紙厚度 − 楞高（長/寬）；內高 = 外高 − 2×(面紙厚度 + 楞高)<br>
+                製造尺寸 = 內尺寸 + 楞高（長/寬）；製造高 = 內高 + 2×楞高<br>
+                展開長 = (外長+外寬)×2 + 釘接邊；<strong>展開寬 = (外寬+外高)×2</strong>（上下各一組蓋板）<br>
+                才數 = 展開長 × 展開寬 ÷ 918；面積 = [(外長+外寬)×2÷100 + 0.04] × (外寬÷100 + 外高÷100 + 0.05)<br>
+                <span style="color: var(--accent-green);">成本 = 面積 × 每平方米單價</span>
             </div>
 
             <div style="margin-top:24px;">
                 <div style="font-weight:600; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
                     <span>📋 楞型參考表</span>
-                    <span style="font-size:0.8rem; color:var(--text-tertiary);">(點擊上方選單快速設定厚度)</span>
+                    <span style="font-size:0.8rem; color:var(--text-tertiary);">(選單選取可自動填入楞高與面紙厚度)</span>
                 </div>
                 <div class="flute-grid">
-                    <div class="flute-item"><strong>A楞</strong> 5mm<br>緩衝佳，適合易碎品</div>
-                    <div class="flute-item"><strong>B楞</strong> 3mm<br>強度高，物流箱</div>
-                    <div class="flute-item"><strong>C楞</strong> 4mm<br>全球通用</div>
-                    <div class="flute-item"><strong>E楞</strong> 1.5mm<br>彩盒、披薩盒</div>
-                    <div class="flute-item"><strong>F/G楞</strong> <1mm<br>化妝品、精細包裝</div>
+                    <div class="flute-item"><strong>A楞</strong> 楞高5mm<br>緩衝佳，適合易碎品</div>
+                    <div class="flute-item"><strong>B楞</strong> 楞高3mm<br>強度高，物流箱</div>
+                    <div class="flute-item"><strong>C楞</strong> 楞高4mm<br>全球通用</div>
+                    <div class="flute-item"><strong>E楞</strong> 楞高1.5mm<br>彩盒、披薩盒</div>
+                    <div class="flute-item"><strong>F/G楞</strong> 楞高&lt;1mm<br>化妝品、精細包裝</div>
                 </div>
             </div>
         </div>
@@ -486,16 +488,28 @@
                 <table>
                     <thead><tr><th>尺寸類型</th><th>長/寬方向公式</th><th>高度方向公式</th><th>關鍵參數說明</th></tr></thead>
                     <tbody>
-                        <tr><td>製造尺寸</td><td>內尺寸＋紙板厚度</td><td>內尺寸＋2×紙板厚度</td><td><strong>紙板厚度</strong>：紙板總厚度 (mm)</td></tr>
-                        <tr><td>外尺寸</td><td>製造尺寸＋紙層厚度</td><td>製造尺寸＋2×紙層厚度</td><td><strong>紙層厚度</strong>：三層≈1mm，五層≈2mm</td></tr>
+                        <tr><td>製造尺寸</td><td>內尺寸＋楞高</td><td>內尺寸＋2×楞高</td><td><strong>楞高</strong>：A楞5mm / B楞3mm / C楞4mm</td></tr>
+                        <tr><td>外尺寸</td><td>製造尺寸＋面紙厚度</td><td>製造尺寸＋2×面紙厚度</td><td><strong>面紙厚度</strong>：三層≈1mm，五層≈2mm</td></tr>
                     </tbody>
                 </table>
             </div>
-            <div class="note">📌 範例：五層紙板厚7mm、紙層厚2mm，內尺寸400×260×260 → 外尺寸409×269×278 mm</div>
+            <div class="note">📌 範例：A楞(楞高5mm)、面紙厚2mm，內尺寸400×260×260mm → 外尺寸407×267×274mm</div>
         </div>
 
         <div class="card">
-            <div class="card-title"><span></span>2. 強度計算 (凱里卡特公式)</div>
+            <div class="card-title"><span></span>2. 才數計算 <span class="badge">已修正</span></div>
+            <div class="formula-block">
+                <div class="formula">展開長 = (外長 + 外寬) × 2 + 釘接邊</div>
+                <div class="formula">展開寬 = (外寬 + 外高) × 2　← 上下蓋各一組</div>
+                <div class="formula">才數 = 展開長 × 展開寬 ÷ 918</div>
+                <div class="note" style="margin-top:12px;">
+                    ⚠️ <strong>展開寬修正說明：</strong>展開後，寬度方向包含前後兩組蓋板（上下各一），因此應乘以2，即 (外寬+外高)×2，而非僅 外寬+外高。
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><span></span>3. 強度計算 (凱里卡特公式)</div>
             <div class="formula-block">
                 <div class="formula">P = Px × F</div>
                 <div style="display:flex; flex-wrap:wrap; gap:16px; margin:15px 0;">
@@ -518,7 +532,7 @@
         </div>
 
         <div class="card">
-            <div class="card-title"><span></span>3. 面積與成本</div>
+            <div class="card-title"><span></span>4. 面積與成本</div>
             <div class="table-wrapper">
                 <table>
                     <thead><tr><th>單位</th><th>面積公式</th><th>備註</th></tr></thead>
@@ -534,153 +548,117 @@
 </div>
 
 <script>
-    // 主題切換 - 圖示版
+    // ── 主題切換 ──────────────────────────────
     const themeBtn = document.getElementById('themeBtn');
     const body = document.body;
 
     function updateThemeIcon() {
-        const isDark = body.getAttribute('data-theme') === 'dark';
-        themeBtn.innerText = isDark ? '☀️' : '🌙';
+        themeBtn.innerText = body.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
     }
-
-    function toggleTheme() {
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-        } else {
-            body.setAttribute('data-theme', 'dark');
-        }
+    themeBtn.addEventListener('click', () => {
+        body.getAttribute('data-theme') === 'dark'
+            ? body.removeAttribute('data-theme')
+            : body.setAttribute('data-theme', 'dark');
         updateThemeIcon();
-    }
-
-    themeBtn.addEventListener('click', toggleTheme);
-
-    // 初始偵測系統深色模式
+    });
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         body.setAttribute('data-theme', 'dark');
-        updateThemeIcon();
-    } else {
-        updateThemeIcon();
     }
+    updateThemeIcon();
 
-    // 頁面切換
-    const tabEstimator = document.getElementById('tabEstimator');
-    const tabFormulas = document.getElementById('tabFormulas');
-    const pageEstimator = document.getElementById('pageEstimator');
-    const pageFormulas = document.getElementById('pageFormulas');
-    tabEstimator.addEventListener('click', () => {
-        tabEstimator.classList.add('active');
-        tabFormulas.classList.remove('active');
-        pageEstimator.classList.add('active');
-        pageFormulas.classList.remove('active');
+    // ── 頁面切換 ──────────────────────────────
+    document.getElementById('tabEstimator').addEventListener('click', () => {
+        document.getElementById('tabEstimator').classList.add('active');
+        document.getElementById('tabFormulas').classList.remove('active');
+        document.getElementById('pageEstimator').classList.add('active');
+        document.getElementById('pageFormulas').classList.remove('active');
     });
-    tabFormulas.addEventListener('click', () => {
-        tabFormulas.classList.add('active');
-        tabEstimator.classList.remove('active');
-        pageFormulas.classList.add('active');
-        pageEstimator.classList.remove('active');
+    document.getElementById('tabFormulas').addEventListener('click', () => {
+        document.getElementById('tabFormulas').classList.add('active');
+        document.getElementById('tabEstimator').classList.remove('active');
+        document.getElementById('pageFormulas').classList.add('active');
+        document.getElementById('pageEstimator').classList.remove('active');
     });
 
-    // 一鍵估算邏輯
-    const outL = document.getElementById('outL');
-    const outW = document.getElementById('outW');
-    const outH = document.getElementById('outH');
-    const stitch = document.getElementById('stitch');
-    const boardThick = document.getElementById('boardThick');
-    const layerThick = document.getElementById('layerThick');
-    const price = document.getElementById('price');
-    const fluteSelect = document.getElementById('fluteSelect');
-    const fluteDesc = document.getElementById('fluteDesc');
-
-    const innerDim = document.getElementById('innerDim');
-    const manuDim = document.getElementById('manuDim');
-    const outerDim = document.getElementById('outerDim');
-    const flatDim = document.getElementById('flatDim');
-    const talentVal = document.getElementById('talentVal');
-    const areaVal = document.getElementById('areaVal');
-    const costVal = document.getElementById('costVal');
-
-    // 簡化後的楞型描述對照
+    // ── 楞型描述對照（BUG FIX: 分開儲存楞高與面紙厚度） ──
     const descMap = {
-        '5': 'A楞：5mm，緩衝性佳，適合易碎品或較輕體積大物品。',
-        '3': 'B楞：3mm，強度高、支撐力好，常用於物流箱、飲料罐。',
-        '4': 'C楞：4mm，全球通用，介於A/B之間。',
-        '1.5': 'E楞：1.5mm，較薄，折線精準，常用彩盒、披薩盒。',
-        '1': 'F/G楞：<1mm，極薄，適用化妝品、精細產品內包裝。',
-        '': '自定義模式：可手動輸入紙板厚度。'
+        '5|2':   'A楞：楞高5mm，面紙厚2mm，緩衝性佳，適合易碎品或體積大輕量物。',
+        '3|1':   'B楞：楞高3mm，面紙厚1mm，強度高、支撐力好，常用物流箱、飲料罐。',
+        '4|1.5': 'C楞：楞高4mm，面紙厚1.5mm，全球通用，介於A/B之間的均衡選擇。',
+        '1.5|1': 'E楞：楞高1.5mm，面紙厚1mm，較薄，折線精準，常用彩盒、披薩盒。',
+        '1|0.5': 'F/G楞：楞高<1mm，面紙厚0.5mm，極薄，適用化妝品、精細產品內包裝。',
+        '':      '自定義模式：可手動輸入楞高與面紙厚度。'
     };
 
-    function updateFluteDesc(value) {
-        fluteDesc.textContent = descMap[value] || descMap[''];
-    }
+    const fluteSelect = document.getElementById('fluteSelect');
+    const fluteDesc   = document.getElementById('fluteDesc');
+    const boardThick  = document.getElementById('boardThick');
+    const layerThick  = document.getElementById('layerThick');
 
     fluteSelect.addEventListener('change', (e) => {
         const val = e.target.value;
-        updateFluteDesc(val);
+        fluteDesc.textContent = descMap[val] || descMap[''];
         if (val) {
-            boardThick.value = val; // 更新紙板厚度 (mm)
+            const [flute, layer] = val.split('|');
+            // BUG FIX: 楞型選單同時設定楞高與面紙厚度，不再混用單一欄位
+            boardThick.value = flute;
+            layerThick.value = layer;
         }
         computeAll();
     });
 
+    // ── 核心計算（BUG FIX: 移除硬編碼特例；才數公式修正） ──
     function computeAll() {
-        let L = parseFloat(outL.value) || 0;
-        let W = parseFloat(outW.value) || 0;
-        let H = parseFloat(outH.value) || 0;
-        let s = parseFloat(stitch.value) || 0;
-        let bt = (parseFloat(boardThick.value) || 0) / 10; // 轉為 cm
-        let lt = (parseFloat(layerThick.value) || 0) / 10; // 轉為 cm
-        let p = parseFloat(price.value) || 0;
+        const L  = parseFloat(document.getElementById('outL').value)   || 0;
+        const W  = parseFloat(document.getElementById('outW').value)   || 0;
+        const H  = parseFloat(document.getElementById('outH').value)   || 0;
+        const s  = parseFloat(document.getElementById('stitch').value) || 0;
+        const bt = (parseFloat(boardThick.value) || 0) / 10; // 楞高，mm → cm
+        const lt = (parseFloat(layerThick.value) || 0) / 10; // 面紙厚，mm → cm
+        const p  = parseFloat(document.getElementById('price').value)  || 0;
 
-        // 如果輸入與範例完全一致，強制顯示用戶指定的數值
-        if (L === 40 && W === 30 && H === 25 && s === 4 && bt === 0.7 && lt === 0.2 && p === 3.5) {
-            innerDim.textContent = '39.7×29.7×24.4 cm';
-            manuDim.textContent = '39.8×29.8×24.6 cm';
-            outerDim.textContent = '40.0×30.0×25.0 cm';
-            flatDim.textContent = '144.0×55.0 cm';
-            talentVal.textContent = '8.63';
-            areaVal.textContent = '0.864 m²';
-            costVal.textContent = '3.02 NT$';
-            return;
-        }
-
-        // 正常計算
         if (L > 0 && W > 0 && H > 0) {
-            let inL = L - lt - bt;
-            let inW = W - lt - bt;
-            let inH = H - 2*(lt + bt);
-            let manuL = inL + bt;
-            let manuW = inW + bt;
-            let manuH = inH + 2*bt;
-            let flatLen = (L + W) * 2 + s;
-            let flatWidth = W + H;
-            let talent = (flatLen * flatWidth) / 918;
-            let Lm = L / 100;
-            let Wm = W / 100;
-            let Hm = H / 100;
-            let area = ((Lm + Wm) * 2 + 0.04) * (Wm + Hm + 0.05);
-            area = Math.max(area, 0);
-            let cost = area * p;
+            // 尺寸計算
+            const inL  = L - lt - bt;
+            const inW  = W - lt - bt;
+            const inH  = H - 2 * (lt + bt);
+            const manuL = inL + bt;
+            const manuW = inW + bt;
+            const manuH = inH + 2 * bt;
 
-            innerDim.textContent = `${inL.toFixed(1)}×${inW.toFixed(1)}×${inH.toFixed(1)} cm`;
-            manuDim.textContent = `${manuL.toFixed(1)}×${manuW.toFixed(1)}×${manuH.toFixed(1)} cm`;
-            outerDim.textContent = `${L.toFixed(1)}×${W.toFixed(1)}×${H.toFixed(1)} cm`;
-            flatDim.textContent = `${flatLen.toFixed(1)}×${flatWidth.toFixed(1)} cm`;
-            talentVal.textContent = talent.toFixed(2);
-            areaVal.textContent = area.toFixed(3) + ' m²';
-            costVal.textContent = cost.toFixed(2) + ' NT$';
+            // 展開尺寸
+            const flatLen   = (L + W) * 2 + s;
+            // BUG FIX: 展開寬 = (W+H)×2，含上下兩組蓋板
+            const flatWidth = (W + H) * 2;
+
+            // 才數
+            const talent = (flatLen * flatWidth) / 918;
+
+            // 面積（m²）
+            const Lm   = L / 100;
+            const Wm   = W / 100;
+            const Hm   = H / 100;
+            const area = ((Lm + Wm) * 2 + 0.04) * (Wm + Hm + 0.05);
+            const cost = area * p;
+
+            document.getElementById('innerDim').textContent  = `${inL.toFixed(1)} × ${inW.toFixed(1)} × ${inH.toFixed(1)} cm`;
+            document.getElementById('manuDim').textContent   = `${manuL.toFixed(1)} × ${manuW.toFixed(1)} × ${manuH.toFixed(1)} cm`;
+            document.getElementById('outerDim').textContent  = `${L.toFixed(1)} × ${W.toFixed(1)} × ${H.toFixed(1)} cm`;
+            document.getElementById('flatDim').textContent   = `${flatLen.toFixed(1)} × ${flatWidth.toFixed(1)} cm`;
+            document.getElementById('talentVal').textContent = talent.toFixed(2);
+            document.getElementById('areaVal').textContent   = area.toFixed(3) + ' m²';
+            document.getElementById('costVal').textContent   = cost.toFixed(2) + ' NT$';
         } else {
-            innerDim.textContent = '--';
-            manuDim.textContent = '--';
-            outerDim.textContent = '--';
-            flatDim.textContent = '--';
-            talentVal.textContent = '--';
-            areaVal.textContent = '--';
-            costVal.textContent = '--';
+            ['innerDim','manuDim','outerDim','flatDim','talentVal','areaVal','costVal']
+                .forEach(id => document.getElementById(id).textContent = '--');
         }
     }
 
-    [outL, outW, outH, stitch, boardThick, layerThick, price].forEach(el => el.addEventListener('input', computeAll));
-    updateFluteDesc('');
+    ['outL','outW','outH','stitch','boardThick','layerThick','price']
+        .forEach(id => document.getElementById(id).addEventListener('input', computeAll));
+
+    // 初始化
+    fluteDesc.textContent = descMap[''];
     computeAll();
 </script>
 </body>
