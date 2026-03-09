@@ -1,659 +1,926 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>瓦楞紙箱計算器</title>
-    <style>
-        :root {
-            --bg-start: #f2f4f8;
-            --bg-end: #e9ecf0;
-            --card-bg: rgba(255,255,255,0.85);
-            --text-primary: #1d1c1f;
-            --text-secondary: #4a4a4e;
-            --text-tertiary: #6c6c70;
-            --accent-orange: #FF6600;
-            --accent-gold: #FF9F0A;
-            --accent-green: #34c759;
-            --border-light: rgba(0,0,0,0.09);
-            --input-bg: #ffffff;
-            --shadow: 0 8px 24px -8px rgba(0,0,0,0.13);
-            --input-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            --tab-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            --table-header-bg: rgba(255,102,0,0.07);
-            --table-row-bg: rgba(255,255,255,0.6);
-            --table-alt-bg: rgba(0,0,0,0.025);
-            --tab-inactive: rgba(0,0,0,0.05);
-            --cost-highlight: rgba(52,199,89,0.13);
-            --focus-shadow: 0 0 0 3px rgba(255,102,0,0.25);
-        }
-        [data-theme="dark"] {
-            --bg-start: #1a1a1e;
-            --bg-end: #0f0f12;
-            --card-bg: rgba(38,38,43,0.9);
-            --text-primary: #f5f5f7;
-            --text-secondary: #aeaeb2;
-            --text-tertiary: #8e8e93;
-            --accent-orange: #FF9F0A;
-            --accent-gold: #FFB340;
-            --accent-green: #30d158;
-            --border-light: rgba(255,255,255,0.12);
-            --input-bg: #1c1c1e;
-            --shadow: 0 8px 24px -8px rgba(0,0,0,0.5);
-            --input-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            --tab-shadow: 0 2px 8px rgba(0,0,0,0.4);
-            --table-header-bg: rgba(255,159,10,0.13);
-            --table-row-bg: rgba(50,50,55,0.6);
-            --table-alt-bg: rgba(255,255,255,0.03);
-            --tab-inactive: rgba(255,255,255,0.07);
-            --cost-highlight: rgba(48,209,88,0.18);
-            --focus-shadow: 0 0 0 3px rgba(255,159,10,0.4);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>📦 瓦楞紙箱計算器</title>
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  /* Brand */
+  --orange:       #FF6B2B;
+  --orange-soft:  #FF8C5A;
+  --orange-glow:  rgba(255,107,43,.18);
+  --gold:         #FFAD3B;
+  --green:        #29D05A;
+  --green-soft:   rgba(41,208,90,.15);
+  --blue:         #3B9EFF;
+  --purple:       #9B6DFF;
+  --red:          #FF453A;
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro TC", "Helvetica Neue", sans-serif;
-            margin: 0; padding: 0;
-        }
+  /* Light mode surfaces */
+  --bg:           #F2F3F7;
+  --bg2:          #E8EAF0;
+  --surface:      rgba(255,255,255,.82);
+  --surface2:     rgba(255,255,255,.55);
+  --surface3:     rgba(255,255,255,.35);
+  --glass-border: rgba(255,255,255,.6);
+  --divider:      rgba(0,0,0,.08);
 
-        body {
-            background: linear-gradient(150deg, var(--bg-start), var(--bg-end));
-            color: var(--text-primary);
-            min-height: 100vh;
-            padding: 12px 10px 36px;
-            transition: background .3s, color .2s;
-        }
+  /* Light mode text */
+  --t1: #0D0D0F;
+  --t2: #3C3C43;
+  --t3: #6C6C72;
+  --t4: #AEAEB4;
 
-        .container { width: 100%; max-width: 720px; margin: 0 auto; }
+  /* Light mode input */
+  --input-bg:     #ffffff;
+  --input-border: rgba(0,0,0,.1);
+  --input-focus:  rgba(255,107,43,.3);
 
-        /* ── Header ── */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .header h1 {
-            font-size: clamp(1.25rem, 5.5vw, 1.9rem);
-            font-weight: 700;
-            letter-spacing: -.02em;
-            background: linear-gradient(130deg, var(--accent-orange), var(--accent-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
-        .theme-toggle {
-            width: 40px; height: 40px; min-width: 40px;
-            border-radius: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-light);
-            box-shadow: var(--input-shadow);
-            cursor: pointer;
-            font-size: 20px;
-            display: flex; align-items: center; justify-content: center;
-            transition: .2s;
-        }
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.06);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
+  --shadow-xl:  0 24px 64px rgba(0,0,0,.12);
+  --glow:       0 0 30px rgba(255,107,43,.25);
 
-        /* ── Tabs ── */
-        .tab-bar {
-            display: flex; gap: 8px;
-            margin-bottom: 14px;
-        }
-        .tab {
-            flex: 1;
-            background: var(--tab-inactive);
-            border: 1px solid var(--border-light);
-            border-radius: 40px;
-            padding: 10px 6px;
-            text-align: center;
-            font-weight: 600;
-            font-size: clamp(0.82rem, 3.8vw, 1rem);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all .2s;
-        }
-        .tab.active { background: var(--accent-orange); color: #fff; border-color: var(--accent-orange); }
+  /* Geometry */
+  --r-sm:  10px;
+  --r-md:  16px;
+  --r-lg:  22px;
+  --r-xl:  28px;
+  --r-2xl: 36px;
+}
 
-        /* ── Card ── */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 24px;
-            padding: 16px 13px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow);
-        }
-        .card-title {
-            font-size: clamp(1rem, 4.2vw, 1.4rem);
-            font-weight: 600;
-            margin-bottom: 13px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .card-title .bar {
-            background: var(--accent-orange);
-            width: 5px; min-width: 5px; height: 22px;
-            border-radius: 10px;
-        }
+[data-theme="dark"] {
+  --bg:           #0C0C10;
+  --bg2:          #141418;
+  --surface:      rgba(28,28,34,.88);
+  --surface2:     rgba(38,38,46,.7);
+  --surface3:     rgba(48,48,58,.5);
+  --glass-border: rgba(255,255,255,.1);
+  --divider:      rgba(255,255,255,.07);
 
-        /* ── Input grid ── */
-        .input-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 9px;
-            margin-bottom: 12px;
-        }
-        .span-2 { grid-column: span 2; }
+  --t1: #F5F5F7;
+  --t2: #AEAEB4;
+  --t3: #6E6E76;
+  --t4: #3A3A40;
 
-        .input-group label {
-            display: block;
-            font-size: 11.5px;
-            margin-bottom: 4px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-        .input-wrapper { position: relative; }
+  --input-bg:     rgba(22,22,28,.9);
+  --input-border: rgba(255,255,255,.1);
+  --input-focus:  rgba(255,140,90,.35);
 
-        input, select {
-            width: 100%;
-            padding: 11px 36px 11px 11px;
-            border-radius: 13px;
-            border: 1px solid var(--border-light);
-            background: var(--input-bg);
-            color: var(--text-primary);
-            font-size: 16px;
-            outline: none;
-            box-shadow: var(--input-shadow);
-            appearance: none;
-            transition: border .2s, box-shadow .2s;
-        }
-        select {
-            cursor: pointer;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%238e8e93" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 11px center;
-        }
-        input:focus, select:focus {
-            border-color: var(--accent-orange);
-            box-shadow: var(--focus-shadow);
-        }
-        .unit {
-            position: absolute; right: 10px; top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-tertiary); font-size: 11px;
-            pointer-events: none;
-        }
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.3);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.4);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.5);
+  --shadow-xl:  0 24px 64px rgba(0,0,0,.6);
+  --glow:       0 0 40px rgba(255,107,43,.35);
 
-        /* 楞型特性框 */
-        .desc-box {
-            background: var(--table-alt-bg);
-            border-radius: 13px;
-            padding: 11px 12px;
-            font-size: 12.5px;
-            color: var(--text-secondary);
-            line-height: 1.55;
-            min-height: 44px;
-            display: flex; align-items: center;
-        }
+  --orange:      #FF8C5A;
+  --gold:        #FFBE5C;
+  --green:       #32D74B;
+  --blue:        #5AC8FA;
+  --purple:      #BF7FFF;
+}
 
-        /* ── 結果卡片區 ── */
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 14px;
-        }
-        .result-item {
-            background: var(--table-alt-bg);
-            border-radius: 14px;
-            padding: 10px 12px;
-            border: 1px solid var(--border-light);
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .result-item .r-label {
-            font-size: 0.72rem;
-            color: var(--text-tertiary);
-            font-weight: 500;
-            line-height: 1.3;
-        }
-        .result-item .r-value {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--accent-orange);
-            word-break: break-all;
-            line-height: 1.3;
-        }
-        /* 成本卡片：全寬 + 綠色高亮 */
-        .result-item.cost-item {
-            grid-column: span 2;
-            background: var(--cost-highlight);
-            border-color: var(--accent-green);
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            padding: 13px 16px;
-        }
-        .result-item.cost-item .r-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-        .result-item.cost-item .r-value {
-            font-size: 1.2rem;
-            color: var(--accent-green);
-        }
+/* ═══════════════════════════════════════════
+   RESET + BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, "SF Pro Display", "SF Pro Text",
+               "PingFang TC", "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--t1);
+  min-height: 100vh;
+  padding: 0 0 60px;
+  transition: background .4s, color .3s;
+  overflow-x: hidden;
+}
 
-        /* ── Note ── */
-        .note {
-            font-size: 0.77rem;
-            color: var(--text-tertiary);
-            background: var(--card-bg);
-            border-radius: 13px;
-            padding: 9px 11px;
-            margin-top: 11px;
-            border-left: 3px solid var(--accent-orange);
-            line-height: 1.65;
-            word-break: break-word;
-        }
+/* ═══════════════════════════════════════════
+   BACKGROUND DECORATION
+═══════════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 10%, rgba(255,107,43,.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(155,109,255,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 70% 15%, rgba(59,158,255,.06) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+[data-theme="dark"] body::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 10%, rgba(255,107,43,.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(155,109,255,.14) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 70% 15%, rgba(59,158,255,.10) 0%, transparent 60%);
+}
 
-        /* ── 楞型卡片 ── */
-        .flute-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 7px;
-            margin-top: 11px;
-        }
-        .flute-item {
-            background: var(--table-alt-bg);
-            border-radius: 12px;
-            padding: 9px 9px;
-            border-left: 3px solid var(--accent-orange);
-            font-size: 0.75rem;
-            line-height: 1.5;
-        }
-        .flute-item strong {
-            display: block;
-            color: var(--accent-orange);
-            font-size: 0.85rem;
-            margin-bottom: 1px;
-        }
+/* ═══════════════════════════════════════════
+   LAYOUT WRAPPER
+═══════════════════════════════════════════ */
+.wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 14px;
+}
 
-        /* ── 公式頁 ── */
-        .table-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border-radius: 14px;
-            margin: 8px 0 11px;
-        }
-        table { width: 100%; border-collapse: collapse; min-width: 380px; }
-        th {
-            background: var(--table-header-bg);
-            color: var(--text-primary);
-            font-weight: 600;
-            padding: 10px 9px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-light);
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-        td {
-            padding: 10px 9px;
-            background: var(--table-row-bg);
-            border-bottom: 1px solid var(--border-light);
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-        }
-        tr:last-child td { border-bottom: none; }
-        td:first-child { font-weight: 500; color: var(--text-primary); }
+/* ═══════════════════════════════════════════
+   HERO HEADER
+═══════════════════════════════════════════ */
+.hero {
+  padding: 52px 0 28px;
+  text-align: center;
+  position: relative;
+}
+.hero-icon {
+  font-size: 52px;
+  line-height: 1;
+  margin-bottom: 14px;
+  display: block;
+  filter: drop-shadow(0 4px 12px rgba(255,107,43,.4));
+  animation: floatIcon 4s ease-in-out infinite;
+}
+@keyframes floatIcon {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.hero-title {
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--gold) 50%, var(--orange-soft) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+.hero-sub {
+  font-size: .82rem;
+  color: var(--t3);
+  letter-spacing: .03em;
+  font-weight: 500;
+}
 
-        .formula-block {
-            background: rgba(255,102,0,0.03);
-            border-radius: 16px;
-            padding: 13px 11px;
-            margin: 12px 0 8px;
-            border: 1px dashed var(--accent-orange);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .formula {
-            font-family: "SF Mono", "Menlo", monospace;
-            font-size: clamp(0.72rem, 2.8vw, 0.95rem);
-            color: var(--accent-orange);
-            padding: 5px 11px;
-            border-radius: 40px;
-            display: block;
-            background: var(--input-bg);
-            margin: 4px 0;
-            white-space: nowrap;
-            overflow-x: auto;
-        }
-        .badge {
-            display: inline-block;
-            background: var(--accent-green);
-            color: #fff;
-            font-size: 0.62rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 20px;
-            vertical-align: middle;
-            margin-left: 4px;
-        }
+/* ═══════════════════════════════════════════
+   THEME TOGGLE — floating pill
+═══════════════════════════════════════════ */
+.theme-pill {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 40px;
+  padding: 7px 14px 7px 10px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--t2);
+  transition: all .25s;
+  user-select: none;
+}
+.theme-pill:hover { transform: scale(1.04); box-shadow: var(--shadow-lg); }
+.theme-pill .pill-icon { font-size: 16px; line-height: 1; }
 
-        .page { display: none; }
-        .page.active { display: block; }
+/* ═══════════════════════════════════════════
+   SEGMENT TABS
+═══════════════════════════════════════════ */
+.seg-wrap {
+  padding: 0 0 20px;
+}
+.seg {
+  display: flex;
+  gap: 0;
+  background: var(--surface2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-xl);
+  padding: 4px;
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-sm);
+}
+.seg-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-lg);
+  padding: 11px 8px;
+  font-size: clamp(.8rem, 3.5vw, .95rem);
+  font-weight: 600;
+  color: var(--t3);
+  cursor: pointer;
+  transition: all .22s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap;
+}
+.seg-btn.active {
+  background: linear-gradient(135deg, var(--orange), var(--gold));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(255,107,43,.4), var(--shadow-sm);
+  transform: scale(1.02);
+}
 
-        /* ── Desktop loosen-up ── */
-        @media (min-width: 560px) {
-            body { padding: 20px 16px 48px; }
-            .card { padding: 22px 20px; border-radius: 30px; }
-            .input-grid { gap: 12px; margin-bottom: 16px; }
-            input, select { padding: 13px 40px 13px 14px; border-radius: 16px; }
-            .result-table td { padding: 13px 16px; font-size: 0.92rem; }
-            .result-table td:first-child { font-size: 0.88rem; }
-            .formula { display: inline-block; }
-        }
-        @media (min-width: 560px) {
-            .input-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
-            .input-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
-        }
-    </style>
+/* ═══════════════════════════════════════════
+   GLASS CARD
+═══════════════════════════════════════════ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-2xl);
+  padding: 20px 18px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--shadow-lg);
+  transition: box-shadow .3s;
+}
+.card:hover { box-shadow: var(--shadow-xl); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.card-dot {
+  width: 28px; height: 28px; min-width: 28px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.dot-orange { background: linear-gradient(135deg,var(--orange),var(--gold)); box-shadow: 0 3px 10px rgba(255,107,43,.4); }
+.dot-blue   { background: linear-gradient(135deg,var(--blue),var(--purple)); box-shadow: 0 3px 10px rgba(59,158,255,.4); }
+.dot-green  { background: linear-gradient(135deg,var(--green),var(--blue));  box-shadow: 0 3px 10px rgba(41,208,90,.4); }
+.dot-purple { background: linear-gradient(135deg,var(--purple),var(--blue)); box-shadow: 0 3px 10px rgba(155,109,255,.4); }
+
+.card-ttl {
+  font-size: clamp(.95rem,4vw,1.15rem);
+  font-weight: 700;
+  color: var(--t1);
+  letter-spacing: -.015em;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION LABEL (inside card)
+═══════════════════════════════════════════ */
+.sec-label {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 8px;
+  margin-top: 14px;
+  padding-left: 2px;
+}
+.sec-label:first-of-type { margin-top: 0; }
+
+/* ═══════════════════════════════════════════
+   INPUT GRID
+═══════════════════════════════════════════ */
+.ig {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.ig.ig1 { grid-template-columns: 1fr; }
+.ig.ig3 { grid-template-columns: 1fr 1fr 1fr; }
+.ig.ig-flute { grid-template-columns: 1fr 1.4fr; }
+.span2 { grid-column: span 2; }
+
+.fg { display: flex; flex-direction: column; gap: 4px; }
+.fg label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3);
+  letter-spacing: .02em;
+  padding-left: 2px;
+}
+.iw { position: relative; }
+
+input[type="number"], select {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--r-md);
+  padding: 12px 38px 12px 13px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--t1);
+  outline: none;
+  appearance: none;
+  transition: border-color .2s, box-shadow .2s, background .3s;
+  box-shadow: var(--shadow-sm);
+}
+input[type="number"]:focus, select:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px var(--input-focus), var(--shadow-sm);
+}
+select {
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23888" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+.unit-tag {
+  position: absolute;
+  right: 11px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--t4);
+  pointer-events: none;
+  letter-spacing: .04em;
+}
+
+/* 楞型特性描述框 */
+.desc-pill {
+  background: var(--surface2);
+  border: 1px solid var(--divider);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--t2);
+  line-height: 1.6;
+  min-height: 46px;
+  display: flex; align-items: center;
+  font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════
+   RESULT GRID — 2×3 + 1 full-width
+═══════════════════════════════════════════ */
+.rg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+.ri {
+  background: var(--surface2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  padding: 12px 13px;
+  display: flex; flex-direction: column; gap: 5px;
+  transition: transform .2s, box-shadow .2s;
+}
+.ri:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+.ri .rl {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--t3);
+  letter-spacing: .02em;
+  line-height: 1.3;
+}
+.ri .rv {
+  font-size: clamp(.9rem, 3.2vw, 1.05rem);
+  font-weight: 700;
+  color: var(--orange);
+  line-height: 1.25;
+  word-break: break-all;
+}
+
+/* colour-coded results */
+.ri.c-blue  .rv { color: var(--blue); }
+.ri.c-purple .rv { color: var(--purple); }
+.ri.c-teal  .rv { color: #1AC8A8; }
+.ri.c-gold  .rv { color: var(--gold); }
+
+/* cost — full width highlight */
+.ri.cost {
+  grid-column: span 2;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--green-soft);
+  border-color: rgba(41,208,90,.25);
+  padding: 15px 18px;
+}
+.ri.cost .rl { font-size: .85rem; color: var(--t2); }
+.ri.cost .rv { font-size: clamp(1.1rem, 4.5vw, 1.4rem); color: var(--green); }
+
+/* ═══════════════════════════════════════════
+   FLUTE CHIPS
+═══════════════════════════════════════════ */
+.flute-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.fc {
+  background: var(--surface2);
+  border: 1px solid var(--divider);
+  border-radius: 40px;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t2);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.fc strong { color: var(--orange); }
+
+/* ═══════════════════════════════════════════
+   NOTE / CALLOUT
+═══════════════════════════════════════════ */
+.callout {
+  background: var(--surface2);
+  border: 1px solid var(--divider);
+  border-left: 3px solid var(--orange);
+  border-radius: var(--r-md);
+  padding: 11px 13px;
+  font-size: .75rem;
+  color: var(--t3);
+  line-height: 1.7;
+  margin-top: 13px;
+  word-break: break-word;
+}
+.callout strong { color: var(--t1); }
+
+/* ═══════════════════════════════════════════
+   FORMULA CARDS (formula page)
+═══════════════════════════════════════════ */
+.fml-block {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 12px;
+  background: var(--surface2);
+  border-radius: var(--r-md);
+  border: 1px dashed rgba(255,107,43,.35);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 8px;
+}
+.fml {
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: clamp(.7rem, 2.6vw, .85rem);
+  color: var(--orange);
+  background: var(--input-bg);
+  padding: 5px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  display: block;
+}
+
+/* ref table */
+.ref-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 360px;
+  font-size: .8rem;
+}
+.ref-table th {
+  background: rgba(255,107,43,.08);
+  color: var(--t1);
+  font-weight: 600;
+  padding: 10px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--divider);
+  white-space: nowrap;
+}
+.ref-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--divider);
+  color: var(--t2);
+  vertical-align: top;
+}
+.ref-table tr:last-child td { border-bottom: none; }
+.ref-table td:first-child { font-weight: 600; color: var(--t1); }
+.tw { overflow-x: auto; border-radius: var(--r-md); margin-top: 8px; }
+
+.badge {
+  display: inline-flex; align-items: center;
+  background: var(--green-soft);
+  color: var(--green);
+  border: 1px solid rgba(41,208,90,.25);
+  font-size: .65rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 20px;
+  margin-left: 6px; vertical-align: middle;
+  letter-spacing: .04em;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE TRANSITIONS
+═══════════════════════════════════════════ */
+.page { display: none; animation: fadeUp .3s ease; }
+.page.active { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   BOTTOM NAV (mobile feel)
+═══════════════════════════════════════════ */
+.bot-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-top: 1px solid var(--glass-border);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 8px 20px calc(env(safe-area-inset-bottom, 0px) + 8px);
+  display: flex; gap: 6px;
+}
+.bn {
+  flex: 1; border: none;
+  background: transparent;
+  border-radius: var(--r-lg);
+  padding: 10px 6px;
+  font-size: clamp(.78rem,3.2vw,.9rem);
+  font-weight: 600;
+  color: var(--t3);
+  cursor: pointer;
+  transition: all .22s cubic-bezier(.34,1.56,.64,1);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.bn .bn-ico { font-size: 20px; line-height: 1; }
+.bn.active {
+  color: var(--orange);
+  background: var(--orange-glow);
+}
+
+/* ═══════════════════════════════════════════
+   DESKTOP REFINEMENTS
+═══════════════════════════════════════════ */
+@media (min-width: 560px) {
+  .wrap { padding: 0 20px; }
+  .hero { padding: 64px 0 32px; }
+  .card { padding: 26px 24px; border-radius: 32px; }
+  .ig { gap: 12px; }
+  .ig.ig3 { grid-template-columns: 1fr 1fr 1fr; }
+  input[type="number"], select { padding: 13px 40px 13px 15px; border-radius: var(--r-lg); }
+  .rg { gap: 10px; }
+  .ri { padding: 14px 16px; }
+  .ri .rv { font-size: 1.05rem; }
+  .ri.cost { padding: 16px 20px; }
+  .bot-nav { display: none; }
+  .seg-wrap { display: block; }
+  .seg-wrap-desktop { display: block !important; }
+}
+@media (max-width: 559px) {
+  .seg-wrap { display: none; }
+  .hero { padding: 44px 0 20px; }
+}
+</style>
 </head>
 <body>
-<div class="container">
 
-    <div class="header">
-        <h1>📦 瓦楞紙箱計算器</h1>
-        <button class="theme-toggle" id="themeBtn">🌙</button>
+<!-- Theme toggle -->
+<button class="theme-pill" id="themeBtn" aria-label="切換主題">
+  <span class="pill-icon" id="themeIco">🌙</span>
+  <span id="themeTxt">深色</span>
+</button>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="hero">
+    <span class="hero-icon">📦</span>
+    <h1 class="hero-title">瓦楞紙箱計算器</h1>
+    <p class="hero-sub">CORRUGATED BOX CALCULATOR · zh-TW</p>
+  </div>
+
+  <!-- Desktop tabs -->
+  <div class="seg-wrap">
+    <div class="seg">
+      <button class="seg-btn active" id="dTab0">🔮 一鍵估算</button>
+      <button class="seg-btn" id="dTab1">📚 公式參考</button>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE 0 : 估算 ═══ -->
+  <div id="p0" class="page active">
+
+    <!-- 楞型選擇 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot dot-orange">🪵</div>
+        <span class="card-ttl">楞型設定</span>
+      </div>
+
+      <div class="sec-label">選擇楞型</div>
+      <div class="ig ig-flute">
+        <div class="fg">
+          <label>楞型（自動填入厚度）</label>
+          <div class="iw">
+            <select id="fluteSelect">
+              <option value="">⚙️ 自定義（手動輸入）</option>
+              <option value="5|2">A楞 5mm — 緩衝佳</option>
+              <option value="3|1">B楞 3mm — 強度高</option>
+              <option value="4|1.5">C楞 4mm — 通用</option>
+              <option value="1.5|1">E楞 1.5mm — 彩盒</option>
+              <option value="1|0.5">F/G楞 &lt;1mm — 精細</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg">
+          <label>楞型特性說明</label>
+          <div class="desc-pill" id="fluteDesc">請選擇楞型查看特性說明</div>
+        </div>
+      </div>
+
+      <div class="sec-label">厚度參數</div>
+      <div class="ig">
+        <div class="fg">
+          <label>楞高 / 楞型厚度 (mm)</label>
+          <div class="iw"><input type="number" id="boardThick" value="7" step="0.1" min="0"><span class="unit-tag">mm</span></div>
+        </div>
+        <div class="fg">
+          <label>面紙厚度 (mm)</label>
+          <div class="iw"><input type="number" id="layerThick" value="2" step="0.1" min="0"><span class="unit-tag">mm</span></div>
+        </div>
+      </div>
+
+      <div class="sec-label">楞型速查</div>
+      <div class="flute-row">
+        <span class="fc"><strong>A楞</strong> 5mm 緩衝</span>
+        <span class="fc"><strong>B楞</strong> 3mm 強度</span>
+        <span class="fc"><strong>C楞</strong> 4mm 通用</span>
+        <span class="fc"><strong>E楞</strong> 1.5mm 彩盒</span>
+        <span class="fc"><strong>F/G</strong> &lt;1mm 精細</span>
+      </div>
     </div>
 
-    <div class="tab-bar">
-        <div class="tab active" id="tabEstimator">🔮 一鍵估算</div>
-        <div class="tab" id="tabFormulas">📚 公式參考</div>
+    <!-- 外尺寸輸入 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot dot-blue">📐</div>
+        <span class="card-ttl">外尺寸輸入</span>
+      </div>
+
+      <div class="sec-label">外箱尺寸 (cm)</div>
+      <div class="ig">
+        <div class="fg">
+          <label>外長 L</label>
+          <div class="iw"><input type="number" id="outL" value="40" step="0.1" min="0"><span class="unit-tag">cm</span></div>
+        </div>
+        <div class="fg">
+          <label>外寬 W</label>
+          <div class="iw"><input type="number" id="outW" value="30" step="0.1" min="0"><span class="unit-tag">cm</span></div>
+        </div>
+        <div class="fg">
+          <label>外高 H</label>
+          <div class="iw"><input type="number" id="outH" value="25" step="0.1" min="0"><span class="unit-tag">cm</span></div>
+        </div>
+        <div class="fg">
+          <label>釘接邊</label>
+          <div class="iw"><input type="number" id="stitch" value="4" step="0.1" min="0"><span class="unit-tag">cm</span></div>
+        </div>
+      </div>
+
+      <div class="sec-label">單價</div>
+      <div class="ig ig1">
+        <div class="fg">
+          <label>每平方米單價 (NT$)</label>
+          <div class="iw"><input type="number" id="price" value="3.5" step="0.1" min="0"><span class="unit-tag">NT$</span></div>
+        </div>
+      </div>
     </div>
 
-    <!-- ═══ 估算頁 ═══ -->
-    <div id="pageEstimator" class="page active">
-        <div class="card">
-            <div class="card-title"><div class="bar"></div>🔮 一鍵估算</div>
+    <!-- 計算結果 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot dot-green">✨</div>
+        <span class="card-ttl">計算結果</span>
+      </div>
 
-            <!-- 楞型選擇 -->
-            <div class="input-grid" style="grid-template-columns:1fr 1.3fr;">
-                <div class="input-group">
-                    <label>📋 楞型選擇（自動填入厚度）</label>
-                    <div class="input-wrapper">
-                        <select id="fluteSelect">
-                            <option value="">⚙️ 自定義（手動輸入）</option>
-                            <option value="5|2">A楞 (5mm) 緩衝佳</option>
-                            <option value="3|1">B楞 (3mm) 強度高</option>
-                            <option value="4|1.5">C楞 (4mm) 通用</option>
-                            <option value="1.5|1">E楞 (1.5mm) 彩盒</option>
-                            <option value="1|0.5">F/G楞 (&lt;1mm) 精細</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>✨ 楞型特性</label>
-                    <div class="desc-box" id="fluteDesc">請選擇楞型查看特性</div>
-                </div>
-            </div>
-
-            <!-- 外尺寸 + 釘接邊：手機2欄，桌面4欄 -->
-            <div class="input-grid cols-4">
-                <div class="input-group">
-                    <label>外長 L (cm)</label>
-                    <div class="input-wrapper"><input type="number" id="outL" value="40" step="0.1" min="0"><span class="unit">cm</span></div>
-                </div>
-                <div class="input-group">
-                    <label>外寬 W (cm)</label>
-                    <div class="input-wrapper"><input type="number" id="outW" value="30" step="0.1" min="0"><span class="unit">cm</span></div>
-                </div>
-                <div class="input-group">
-                    <label>外高 H (cm)</label>
-                    <div class="input-wrapper"><input type="number" id="outH" value="25" step="0.1" min="0"><span class="unit">cm</span></div>
-                </div>
-                <div class="input-group">
-                    <label>釘接邊 (cm)</label>
-                    <div class="input-wrapper"><input type="number" id="stitch" value="4" step="0.1" min="0"><span class="unit">cm</span></div>
-                </div>
-            </div>
-
-            <!-- 厚度 + 單價：手機2欄（單價全寬），桌面3欄 -->
-            <div class="input-grid cols-3">
-                <div class="input-group">
-                    <label>楞高 / 楞型厚度 (mm)<br><span style="font-size:10px;opacity:.7;">A楞5 / B楞3 / C楞4</span></label>
-                    <div class="input-wrapper"><input type="number" id="boardThick" value="7" step="0.1" min="0"><span class="unit">mm</span></div>
-                </div>
-                <div class="input-group">
-                    <label>面紙厚度 (mm)<br><span style="font-size:10px;opacity:.7;">三層≈1 / 五層≈2</span></label>
-                    <div class="input-wrapper"><input type="number" id="layerThick" value="2" step="0.1" min="0"><span class="unit">mm</span></div>
-                </div>
-                <div class="input-group span-2" id="priceGroup">
-                    <label>每平方米單價 (NT$)</label>
-                    <div class="input-wrapper"><input type="number" id="price" value="3.5" step="0.1" min="0"><span class="unit">NT$</span></div>
-                </div>
-            </div>
-
-            <!-- 結果 -->
-            <div class="result-grid">
-                <div class="result-item">
-                    <div class="r-label">📏 內尺寸 (L×W×H)</div>
-                    <div class="r-value" id="innerDim">--</div>
-                </div>
-                <div class="result-item">
-                    <div class="r-label">📐 製造尺寸 (L×W×H)</div>
-                    <div class="r-value" id="manuDim">--</div>
-                </div>
-                <div class="result-item">
-                    <div class="r-label">📦 外尺寸 (L×W×H)</div>
-                    <div class="r-value" id="outerDim">--</div>
-                </div>
-                <div class="result-item">
-                    <div class="r-label">📐 展開長 × 展開寬</div>
-                    <div class="r-value" id="flatDim">--</div>
-                </div>
-                <div class="result-item">
-                    <div class="r-label">🧮 才數 (÷918)</div>
-                    <div class="r-value" id="talentVal">--</div>
-                </div>
-                <div class="result-item">
-                    <div class="r-label">📏 紙箱面積 (㎡)</div>
-                    <div class="r-value" id="areaVal">--</div>
-                </div>
-                <div class="result-item cost-item">
-                    <div class="r-label">💰 每箱成本 (NT$)</div>
-                    <div class="r-value" id="costVal">--</div>
-                </div>
-            </div>
-
-            <div class="note">
-                <strong>📌 計算說明：</strong><br>
-                內尺寸 = 外尺寸 − 面紙厚 − 楞高（長/寬）；內高 = 外高 − 2×(面紙厚+楞高)<br>
-                製造尺寸 = 內尺寸 + 楞高（長/寬）；製造高 = 內高 + 2×楞高<br>
-                展開長 = (外長+外寬)×2 + 釘接邊；<strong>展開寬 = (外寬+外高)×2</strong>（含上下蓋）<br>
-                才數 = 展開長×展開寬÷918；面積 = [(外長+外寬)×2÷100+0.04]×(外寬÷100+外高÷100+0.05)<br>
-                <span style="color:var(--accent-green);">成本 = 面積 × 每平方米單價</span>
-            </div>
-
-            <div style="margin-top:18px;">
-                <div style="font-weight:600;font-size:.9rem;margin-bottom:8px;">📋 楞型參考表</div>
-                <div class="flute-grid">
-                    <div class="flute-item"><strong>A楞</strong>楞高5mm<br>緩衝佳</div>
-                    <div class="flute-item"><strong>B楞</strong>楞高3mm<br>強度高</div>
-                    <div class="flute-item"><strong>C楞</strong>楞高4mm<br>通用型</div>
-                    <div class="flute-item"><strong>E楞</strong>楞高1.5mm<br>彩盒</div>
-                    <div class="flute-item"><strong>F/G楞</strong>楞高&lt;1mm<br>精細包裝</div>
-                </div>
-            </div>
+      <div class="rg">
+        <div class="ri">
+          <div class="rl">📏 內尺寸 (L×W×H)</div>
+          <div class="rv" id="innerDim">--</div>
         </div>
+        <div class="ri c-blue">
+          <div class="rl">📐 製造尺寸 (L×W×H)</div>
+          <div class="rv" id="manuDim">--</div>
+        </div>
+        <div class="ri c-purple">
+          <div class="rl">📦 外尺寸 (L×W×H)</div>
+          <div class="rv" id="outerDim">--</div>
+        </div>
+        <div class="ri c-teal">
+          <div class="rl">📐 展開長 × 展開寬</div>
+          <div class="rv" id="flatDim">--</div>
+        </div>
+        <div class="ri c-gold">
+          <div class="rl">🧮 才數 (÷918)</div>
+          <div class="rv" id="talentVal">--</div>
+        </div>
+        <div class="ri">
+          <div class="rl">📏 紙箱面積 (㎡)</div>
+          <div class="rv" id="areaVal">--</div>
+        </div>
+        <div class="ri cost">
+          <div class="rl">💰 每箱成本 (NT$)</div>
+          <div class="rv" id="costVal">--</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>計算說明：</strong><br>
+        內尺寸 = 外尺寸 − 面紙厚 − 楞高（長/寬）；內高 = 外高 − 2×(面紙厚+楞高)<br>
+        製造尺寸 = 內尺寸 + 楞高；展開長 = (外長+外寬)×2 + 釘接邊<br>
+        <strong>展開寬 = (外寬+外高)×2</strong>（含上下兩組蓋板）；才數 = 展開長×展開寬÷918<br>
+        面積 = [(外長+外寬)×2÷100+0.04]×(外寬÷100+外高÷100+0.05)；<span style="color:var(--green)">成本 = 面積×單價</span>
+      </div>
     </div>
 
-    <!-- ═══ 公式頁 ═══ -->
-    <div id="pageFormulas" class="page">
+  </div><!-- /p0 -->
 
-        <div class="card">
-            <div class="card-title"><div class="bar"></div>1. 尺寸計算</div>
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>類型</th><th>長/寬方向</th><th>高度方向</th><th>說明</th></tr></thead>
-                    <tbody>
-                        <tr><td>製造尺寸</td><td>內尺寸＋楞高</td><td>內＋2×楞高</td><td>A=5 B=3 C=4 mm</td></tr>
-                        <tr><td>外尺寸</td><td>製造＋面紙厚</td><td>製造＋2×面紙厚</td><td>三層≈1，五層≈2mm</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="note">📌 例：A楞5mm、面紙2mm，內400×260×260mm → 外407×267×274mm</div>
-        </div>
+  <!-- ═══ PAGE 1 : 公式 ═══ -->
+  <div id="p1" class="page">
 
-        <div class="card">
-            <div class="card-title"><div class="bar"></div>2. 才數計算 <span class="badge">已修正</span></div>
-            <div class="formula-block">
-                <div class="formula">展開長 = (外長 + 外寬) × 2 + 釘接邊</div>
-                <div class="formula">展開寬 = (外寬 + 外高) × 2  ← 含上下蓋</div>
-                <div class="formula">才數 = 展開長 × 展開寬 ÷ 918</div>
-            </div>
-            <div class="note">⚠️ 展開寬須乘以2，含上下兩組蓋板。原公式僅 外寬+外高 為錯誤。</div>
-        </div>
-
-        <div class="card">
-            <div class="card-title"><div class="bar"></div>3. 強度 (凱里卡特)</div>
-            <div class="formula-block">
-                <div class="formula">P = Px × F</div>
-                <div class="formula">三層：Px = (R1+R2+Rm×C) / 15.2</div>
-                <div class="formula">五層：Px = (R1+R2+R3+Rm1×C1+Rm2×C2) / 15.2</div>
-                <div class="formula">A楞 K = 30.3 + 0.275Z − 0.0005Z²</div>
-                <div class="formula">C楞 K = 27.9 + 0.265Z − 0.0005Z²</div>
-                <div class="formula">B楞 K = 24.6 + 0.235Z − 0.0005Z²</div>
-            </div>
-            <div class="note"><strong>堆碼校核 (GB/T 6543-2008)：</strong> P = K × G × (H − h) / h</div>
-        </div>
-
-        <div class="card">
-            <div class="card-title"><div class="bar"></div>4. 面積與成本</div>
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>單位</th><th>面積公式</th><th>備註</th></tr></thead>
-                    <tbody>
-                        <tr><td>米 (m)</td><td>[(長+寬)×2+0.04]×(寬+高+0.05)</td><td>輸入單位為 m</td></tr>
-                        <tr><td>公分(cm)</td><td>[(長+寬)×2+4]×(寬+高+5)/10000</td><td>結果為 ㎡</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="note">💰 紙箱價格 = 面積(㎡) × 每平方米單價</div>
-        </div>
-
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot dot-orange">📐</div>
+        <span class="card-ttl">1. 尺寸換算公式</span>
+      </div>
+      <div class="tw">
+        <table class="ref-table">
+          <thead><tr><th>類型</th><th>長/寬方向</th><th>高度方向</th><th>參數</th></tr></thead>
+          <tbody>
+            <tr><td>製造尺寸</td><td>內尺寸＋楞高</td><td>內＋2×楞高</td><td>A=5 B=3 C=4mm</td></tr>
+            <tr><td>外尺寸</td><td>製造＋面紙厚</td><td>製造＋2×面紙厚</td><td>三層≈1，五層≈2mm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">📌 例：A楞5mm、面紙2mm，內400×260×260mm → 外407×267×274mm</div>
     </div>
-</div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot dot-blue">🧮</div>
+        <span class="card-ttl">2. 才數計算 <span class="badge">已修正</span></span>
+      </div>
+      <div class="fml-block">
+        <span class="fml">展開長 = (外長 + 外寬) × 2 + 釘接邊</span>
+        <span class="fml">展開寬 = (外寬 + 外高) × 2  ← 含上下蓋板</span>
+        <span class="fml">才數   = 展開長 × 展開寬 ÷ 918</span>
+      </div>
+      <div class="callout">⚠️ 展開寬需×2，原公式僅用 外寬+外高 為錯誤。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot dot-purple">💪</div>
+        <span class="card-ttl">3. 強度計算（凱里卡特公式）</span>
+      </div>
+      <div class="fml-block">
+        <span class="fml">P  = Px × F</span>
+        <span class="fml">三層：Px = (R1+R2+Rm×C) / 15.2</span>
+        <span class="fml">五層：Px = (R1+R2+R3+Rm1×C1+Rm2×C2) / 15.2</span>
+        <span class="fml">A楞 K = 30.3 + 0.275Z − 0.0005Z²</span>
+        <span class="fml">C楞 K = 27.9 + 0.265Z − 0.0005Z²</span>
+        <span class="fml">B楞 K = 24.6 + 0.235Z − 0.0005Z²</span>
+      </div>
+      <div class="callout"><strong>堆碼校核 GB/T 6543-2008：</strong> P = K × G × (H − h) / h</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot dot-green">💰</div>
+        <span class="card-ttl">4. 面積與成本</span>
+      </div>
+      <div class="tw">
+        <table class="ref-table">
+          <thead><tr><th>單位</th><th>面積公式</th><th>備註</th></tr></thead>
+          <tbody>
+            <tr><td>米(m)</td><td>[(L+W)×2+0.04]×(W+H+0.05)</td><td>輸入單位 m</td></tr>
+            <tr><td>公分(cm)</td><td>[(L+W)×2+4]×(W+H+5)/10000</td><td>結果為 ㎡</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">💰 紙箱價格 = 面積(㎡) × 每平方米單價</div>
+    </div>
+
+  </div><!-- /p1 -->
+
+</div><!-- /wrap -->
+
+<!-- Mobile bottom nav -->
+<nav class="bot-nav">
+  <button class="bn active" id="mTab0"><span class="bn-ico">🔮</span>估算</button>
+  <button class="bn" id="mTab1"><span class="bn-ico">📚</span>公式</button>
+</nav>
 
 <script>
-// ── 主題切換 ────────────────────────────
+// ── Theme ───────────────────────────────────
+const root    = document.documentElement;
 const themeBtn = document.getElementById('themeBtn');
-function updateIcon() {
-    themeBtn.innerText = document.body.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+const themeIco = document.getElementById('themeIco');
+const themeTxt = document.getElementById('themeTxt');
+
+function applyTheme(dark) {
+  root.setAttribute('data-theme', dark ? 'dark' : 'light');
+  themeIco.textContent = dark ? '☀️' : '🌙';
+  themeTxt.textContent = dark ? '淺色' : '深色';
 }
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+applyTheme(prefersDark);
 themeBtn.addEventListener('click', () => {
-    document.body.getAttribute('data-theme') === 'dark'
-        ? document.body.removeAttribute('data-theme')
-        : document.body.setAttribute('data-theme', 'dark');
-    updateIcon();
-});
-if (window.matchMedia?.('(prefers-color-scheme: dark)').matches)
-    document.body.setAttribute('data-theme', 'dark');
-updateIcon();
-
-// ── 頁面切換 ────────────────────────────
-document.getElementById('tabEstimator').addEventListener('click', () => {
-    document.getElementById('tabEstimator').classList.add('active');
-    document.getElementById('tabFormulas').classList.remove('active');
-    document.getElementById('pageEstimator').classList.add('active');
-    document.getElementById('pageFormulas').classList.remove('active');
-});
-document.getElementById('tabFormulas').addEventListener('click', () => {
-    document.getElementById('tabFormulas').classList.add('active');
-    document.getElementById('tabEstimator').classList.remove('active');
-    document.getElementById('pageFormulas').classList.add('active');
-    document.getElementById('pageEstimator').classList.remove('active');
+  applyTheme(root.getAttribute('data-theme') !== 'dark');
 });
 
-// ── 楞型描述 ────────────────────────────
+// ── Tab switching ────────────────────────────
+function switchPage(idx) {
+  ['p0','p1'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('active', i===idx);
+  });
+  // desktop
+  ['dTab0','dTab1'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('active', i===idx);
+  });
+  // mobile
+  ['mTab0','mTab1'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('active', i===idx);
+  });
+}
+['dTab0','dTab1'].forEach((id,i)=>document.getElementById(id).addEventListener('click',()=>switchPage(i)));
+['mTab0','mTab1'].forEach((id,i)=>document.getElementById(id).addEventListener('click',()=>switchPage(i)));
+
+// ── Flute map ────────────────────────────────
 const descMap = {
-    '5|2':   'A楞：楞高5mm，面紙厚2mm，緩衝性佳，適合易碎品或體積大輕量物。',
-    '3|1':   'B楞：楞高3mm，面紙厚1mm，強度高，常用物流箱、飲料罐。',
-    '4|1.5': 'C楞：楞高4mm，面紙厚1.5mm，全球通用，介於A/B之間。',
-    '1.5|1': 'E楞：楞高1.5mm，面紙厚1mm，較薄，常用彩盒、披薩盒。',
-    '1|0.5': 'F/G楞：楞高<1mm，面紙厚0.5mm，極薄，化妝品精細包裝。',
-    '':      '自定義模式：請手動輸入楞高與面紙厚度。'
+  '5|2':   'A楞：楞高5mm，面紙厚2mm。緩衝性佳，適合易碎品或體積大輕量物品。',
+  '3|1':   'B楞：楞高3mm，面紙厚1mm。強度高支撐力好，常用物流箱、飲料罐。',
+  '4|1.5': 'C楞：楞高4mm，面紙厚1.5mm。全球通用，介於A/B之間的均衡選擇。',
+  '1.5|1': 'E楞：楞高1.5mm，面紙厚1mm。折線精準，常見彩盒、披薩盒。',
+  '1|0.5': 'F/G楞：楞高<1mm，面紙厚0.5mm。極薄，適用化妝品精細內包裝。',
+  '':      '自定義模式：請手動輸入楞高與面紙厚度。'
 };
 
-const fluteSelect = document.getElementById('fluteSelect');
-const fluteDesc   = document.getElementById('fluteDesc');
-const boardThick  = document.getElementById('boardThick');
-const layerThick  = document.getElementById('layerThick');
+const sel   = document.getElementById('fluteSelect');
+const desc  = document.getElementById('fluteDesc');
+const board = document.getElementById('boardThick');
+const layer = document.getElementById('layerThick');
 
-fluteSelect.addEventListener('change', e => {
-    const val = e.target.value;
-    fluteDesc.textContent = descMap[val] ?? descMap[''];
-    if (val) {
-        const [flute, layer] = val.split('|');
-        boardThick.value = flute;
-        layerThick.value = layer;
-    }
-    computeAll();
+sel.addEventListener('change', e => {
+  const v = e.target.value;
+  desc.textContent = descMap[v] ?? descMap[''];
+  if (v) { const [f,l]=v.split('|'); board.value=f; layer.value=l; }
+  computeAll();
 });
 
-// ── 桌面時單價欄取消 span-2 ────────────
-function adjustPriceLayout() {
-    const priceGroup = document.getElementById('priceGroup');
-    if (window.innerWidth >= 560) {
-        priceGroup.classList.remove('span-2');
-    } else {
-        priceGroup.classList.add('span-2');
-    }
-}
-window.addEventListener('resize', adjustPriceLayout);
-adjustPriceLayout();
-
-// ── 核心計算 ────────────────────────────
+// ── Compute ──────────────────────────────────
 function computeAll() {
-    const L  = parseFloat(document.getElementById('outL').value)   || 0;
-    const W  = parseFloat(document.getElementById('outW').value)   || 0;
-    const H  = parseFloat(document.getElementById('outH').value)   || 0;
-    const s  = parseFloat(document.getElementById('stitch').value) || 0;
-    const bt = (parseFloat(boardThick.value) || 0) / 10;
-    const lt = (parseFloat(layerThick.value) || 0) / 10;
-    const p  = parseFloat(document.getElementById('price').value)  || 0;
+  const L  = +document.getElementById('outL').value   || 0;
+  const W  = +document.getElementById('outW').value   || 0;
+  const H  = +document.getElementById('outH').value   || 0;
+  const s  = +document.getElementById('stitch').value || 0;
+  const bt = (+board.value || 0) / 10;
+  const lt = (+layer.value || 0) / 10;
+  const p  = +document.getElementById('price').value  || 0;
 
-    if (L > 0 && W > 0 && H > 0) {
-        const inL   = L - lt - bt;
-        const inW   = W - lt - bt;
-        const inH   = H - 2*(lt + bt);
-        const manuL = inL + bt, manuW = inW + bt, manuH = inH + 2*bt;
-        const flatLen   = (L + W) * 2 + s;
-        const flatWidth = (W + H) * 2;
-        const talent = (flatLen * flatWidth) / 918;
-        const area   = ((L/100 + W/100)*2 + 0.04) * (W/100 + H/100 + 0.05);
-        const cost   = area * p;
+  const set = (id, v) => document.getElementById(id).textContent = v;
 
-        document.getElementById('innerDim').textContent  = `${inL.toFixed(1)}×${inW.toFixed(1)}×${inH.toFixed(1)} cm`;
-        document.getElementById('manuDim').textContent   = `${manuL.toFixed(1)}×${manuW.toFixed(1)}×${manuH.toFixed(1)} cm`;
-        document.getElementById('outerDim').textContent  = `${L.toFixed(1)}×${W.toFixed(1)}×${H.toFixed(1)} cm`;
-        document.getElementById('flatDim').textContent   = `${flatLen.toFixed(1)}×${flatWidth.toFixed(1)} cm`;
-        document.getElementById('talentVal').textContent = talent.toFixed(2);
-        document.getElementById('areaVal').textContent   = area.toFixed(3) + ' m²';
-        document.getElementById('costVal').textContent   = cost.toFixed(2) + ' NT$';
-    } else {
-        ['innerDim','manuDim','outerDim','flatDim','talentVal','areaVal','costVal']
-            .forEach(id => document.getElementById(id).textContent = '--');
-    }
+  if (L>0 && W>0 && H>0) {
+    const inL=L-lt-bt, inW=W-lt-bt, inH=H-2*(lt+bt);
+    const mL=inL+bt, mW=inW+bt, mH=inH+2*bt;
+    const fLen=(L+W)*2+s, fWid=(W+H)*2;
+    const talent=(fLen*fWid)/918;
+    const area=((L/100+W/100)*2+.04)*(W/100+H/100+.05);
+    const cost=area*p;
+
+    set('innerDim',  `${inL.toFixed(1)} × ${inW.toFixed(1)} × ${inH.toFixed(1)} cm`);
+    set('manuDim',   `${mL.toFixed(1)} × ${mW.toFixed(1)} × ${mH.toFixed(1)} cm`);
+    set('outerDim',  `${L.toFixed(1)} × ${W.toFixed(1)} × ${H.toFixed(1)} cm`);
+    set('flatDim',   `${fLen.toFixed(1)} × ${fWid.toFixed(1)} cm`);
+    set('talentVal', talent.toFixed(2));
+    set('areaVal',   area.toFixed(3) + ' m²');
+    set('costVal',   cost.toFixed(2) + ' NT$');
+  } else {
+    ['innerDim','manuDim','outerDim','flatDim','talentVal','areaVal','costVal']
+      .forEach(id => set(id,'--'));
+  }
 }
 
 ['outL','outW','outH','stitch','boardThick','layerThick','price']
-    .forEach(id => document.getElementById(id).addEventListener('input', computeAll));
+  .forEach(id => document.getElementById(id).addEventListener('input', computeAll));
 
-fluteDesc.textContent = descMap[''];
+desc.textContent = descMap[''];
 computeAll();
 </script>
 </body>
