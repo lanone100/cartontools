@@ -94,17 +94,26 @@
         }
 
         .theme-toggle {
+            width: 52px;
+            height: 52px;
+            border-radius: 30px;
             background: var(--card-bg);
             border: 1px solid var(--border-light);
-            padding: 8px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            color: var(--text-primary);
-            font-size: 15px;
-            font-weight: 500;
             backdrop-filter: blur(10px);
             box-shadow: var(--input-shadow);
+            cursor: pointer;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: 0.2s;
+            color: var(--text-primary);
+            padding: 0;
+            line-height: 1;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.02);
         }
 
         .tab-bar {
@@ -353,6 +362,7 @@
             .result-table tr.cost-row td:last-child { font-size: 1.1rem; }
             .note { font-size: 0.8rem; padding: 10px 12px; }
             .formula { font-size: 0.9rem; padding: 6px 12px; }
+            .theme-toggle { width: 48px; height: 48px; font-size: 24px; }
         }
         @media (max-width: 380px) {
             .result-table td { padding: 10px 8px; font-size: 0.8rem; }
@@ -364,7 +374,7 @@
 <div class="container">
     <div class="header">
         <h1>📦 瓦楞紙箱計算器</h1>
-        <button class="theme-toggle" id="themeBtn">深色模式</button>
+        <button class="theme-toggle" id="themeBtn">🌙</button>
     </div>
 
     <div class="tab-bar">
@@ -524,26 +534,32 @@
 </div>
 
 <script>
-    // 主題切換
+    // 主題切換 - 圖示版
     const themeBtn = document.getElementById('themeBtn');
     const body = document.body;
-    function updateThemeButton() {
+
+    function updateThemeIcon() {
         const isDark = body.getAttribute('data-theme') === 'dark';
-        themeBtn.innerText = isDark ? '淺色模式' : '深色模式';
+        themeBtn.innerText = isDark ? '☀️' : '🌙';
     }
-    themeBtn.addEventListener('click', () => {
+
+    function toggleTheme() {
         if (body.getAttribute('data-theme') === 'dark') {
             body.removeAttribute('data-theme');
         } else {
             body.setAttribute('data-theme', 'dark');
         }
-        updateThemeButton();
-    });
+        updateThemeIcon();
+    }
+
+    themeBtn.addEventListener('click', toggleTheme);
+
+    // 初始偵測系統深色模式
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         body.setAttribute('data-theme', 'dark');
-        updateThemeButton();
+        updateThemeIcon();
     } else {
-        updateThemeButton();
+        updateThemeIcon();
     }
 
     // 頁面切換
