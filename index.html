@@ -15,6 +15,7 @@
             --accent-blue: #0071E3;
             --accent-purple: #af52de;
             --accent-green: #34c759;
+            --accent-orange: #ff9f0a;
             --border-light: rgba(0,0,0,0.1);
             --input-bg: #ffffff;
             --shadow: 0 12px 32px -12px rgba(0,0,0,0.15);
@@ -22,6 +23,9 @@
             --table-row-bg: rgba(255,255,255,0.6);
             --table-alt-bg: rgba(0,0,0,0.02);
             --tab-inactive: rgba(0,0,0,0.05);
+            --cost-highlight: rgba(52,199,89,0.15);
+            /* 焦點光暈 */
+            --focus-shadow: 0 0 0 4px rgba(0,113,227,0.3);
         }
 
         [data-theme="dark"] {
@@ -34,6 +38,7 @@
             --accent-blue: #0A84FF;
             --accent-purple: #bf5af2;
             --accent-green: #30d158;
+            --accent-orange: #ff9f0a;
             --border-light: rgba(255,255,255,0.15);
             --input-bg: #1c1c1e;
             --shadow: 0 12px 32px -12px rgba(0,0,0,0.5);
@@ -41,6 +46,9 @@
             --table-row-bg: rgba(50,50,55,0.6);
             --table-alt-bg: rgba(255,255,255,0.03);
             --tab-inactive: rgba(255,255,255,0.08);
+            --cost-highlight: rgba(48,209,88,0.2);
+            /* 深色模式焦點光暈 (更亮) */
+            --focus-shadow: 0 0 0 4px rgba(10,132,255,0.45);
         }
 
         * {
@@ -236,10 +244,11 @@
             color: var(--text-primary);
             font-size: 16px;
             outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
         }
         input:focus {
             border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
+            box-shadow: var(--focus-shadow);
         }
         .unit {
             position: absolute;
@@ -275,6 +284,15 @@
             font-weight: 600;
             color: var(--accent-purple);
             text-align: right;
+        }
+        /* 成本行強調 */
+        .result-table tr.cost-row td {
+            background: var(--cost-highlight);
+            font-weight: 600;
+        }
+        .result-table tr.cost-row td:last-child {
+            color: var(--accent-green);
+            font-size: 1.2rem;
         }
 
         /* 備註小字 */
@@ -353,7 +371,7 @@
                 </div>
             </div>
 
-            <!-- 計算結果一覽表 -->
+            <!-- 計算結果一覽表 (成本行特別強調) -->
             <table class="result-table">
                 <tr><td>📏 內尺寸 (L×W×H)</td><td id="innerDim">--</td></tr>
                 <tr><td>📐 製造尺寸 (L×W×H)</td><td id="manuDim">--</td></tr>
@@ -361,7 +379,7 @@
                 <tr><td>📐 展開長 × 展開寬</td><td id="flatDim">--</td></tr>
                 <tr><td>🧮 才數</td><td id="talentVal">--</td></tr>
                 <tr><td>📏 紙箱面積 (㎡)</td><td id="areaVal">--</td></tr>
-                <tr><td>💰 每箱成本 (NT$)</td><td id="costVal">--</td></tr>
+                <tr class="cost-row"><td>💰 每箱成本 (NT$)</td><td id="costVal">--</td></tr>
             </table>
 
             <div class="note">
@@ -369,7 +387,8 @@
                 內尺寸 = 外尺寸 - 紙層厚度 - 紙板厚度 (長/寬)；內高 = 外高 - 2×(紙層厚度+紙板厚度)<br>
                 製造尺寸 = 內尺寸 + 紙板厚度 (長/寬)；製造高 = 內高 + 2×紙板厚度<br>
                 展開長 = (外長+外寬)×2 + 釘接邊；展開寬 = 外寬 + 外高；才數 = (展開長×展開寬)/918<br>
-                面積 = [(外長+外寬)×2/100 + 0.04] × (外寬/100 + 外高/100 + 0.05) （單位轉為米）
+                面積 = [(外長+外寬)×2/100 + 0.04] × (外寬/100 + 外高/100 + 0.05) （單位轉為米）<br>
+                <span style="color: var(--accent-green);">成本 = 面積 × 每平方米單價，顯示於最後一行（綠色高亮）</span>
             </div>
         </div>
     </div>
