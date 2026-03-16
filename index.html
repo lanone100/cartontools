@@ -537,6 +537,39 @@ body{
   padding-bottom:env(safe-area-inset-bottom,20px);
 }
 
+/* ═══════════════════════════════ TAB BAR ═══════════════════════════════ */
+.tab-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:300;
+  display:flex;
+  background:var(--bg-elevated);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-top:.5px solid var(--border);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+}
+[data-theme="dark"] .tab-bar{box-shadow:0 -4px 20px rgba(0,0,0,0.35)}
+.tab-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;
+  padding:10px 4px 10px;
+  border:none;background:transparent;
+  color:var(--txt3);
+  font-size:10px;font-weight:600;
+  font-family:'Noto Sans TC',sans-serif;
+  cursor:pointer;
+  transition:color .2s,transform .15s;
+  letter-spacing:.02em;
+}
+.tab-btn:active{transform:scale(.93)}
+.tab-btn.active{color:var(--blue)}
+.tab-icon{font-size:22px;line-height:1;transition:transform .2s}
+.tab-btn.active .tab-icon{transform:translateY(-1px)}
+
+/* ═══════════════════════════════ PAGE VIEWS ═══════════════════════════ */
+.page-view{display:none}
+.page-view.active{display:block}
+
 /* ═══════════════════════════════ ANIMATIONS ═══════════════════════════ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.025)}100%{transform:scale(1)}}
@@ -623,7 +656,7 @@ body{
   </button>
 </nav>
 
-<div class="page">
+<div class="page page-view active" id="view-calc">
 
 <!-- ══════ 楞型設定 ══════ -->
 <div class="sec">
@@ -902,7 +935,7 @@ body{
   <div class="dr"><span class="dk">📋 展開長 × 展開寬</span><span class="dv" id="dUnfoldDim">—</span></div>
   <div class="dr"><span class="dk">💰 採用單價</span><span class="dv" id="dRate">未輸入</span></div>
   <div class="dr"><span class="dk">⚙️ 損耗係數</span><span class="dv">3%</span></div>
-  <div class="dr"><span class="dk">🎁 數量折扣</span><span class="dv" id="dDisc">無折扣</span></div>
+
   <div class="dr"><span class="dk">🧪 紙質等級</span><span class="dv" id="dGrade">C-A</span></div>
   <div class="dr"><span class="dk">💥 破裂強度</span><span class="dv" id="dBurst">—</span></div>
   <div class="dr"><span class="dk">🏗 耐壓強度 BCT</span><span class="dv" id="dBCT">—</span></div>
@@ -996,30 +1029,131 @@ body{
   </div>
 </div>
 
+<div class="footer">
+  © 2026 Packaging Tech · 計算結果供參考，實際報價請洽業務
+</div>
+
+</div><!-- /view-calc -->
+
+<!-- ══════════════════════════════════════════════
+     第二頁：公式說明 & 規格對照
+══════════════════════════════════════════════ -->
+<div class="page page-view" id="view-ref">
+
+<div class="sec">
+  <div class="sec-icon" style="background:var(--blue-lt);font-size:15px">🧮</div>
+  <span class="sec-text">計算公式說明</span>
+  <div class="sec-line"></div>
+</div>
+
 <div class="card">
-  <div class="card-hd"><div class="card-hd-icon" style="background:var(--green-lt)">🎁</div><div class="card-hd-title">數量折扣方案</div></div>
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--teal-lt)">📐</div><div class="card-hd-title">尺寸換算公式</div></div>
+  <div class="fb">
+    <div class="ft">內尺寸（cm）</div>
+    <div class="fl2">內長/寬 = 外長/寬 − <span class="hl">面紙厚 − 楞高</span></div>
+    <div class="fl2">內高 = 外高 − <span class="hl">2 × (面紙厚 + 楞高)</span></div>
+  </div>
+  <div class="fb">
+    <div class="ft">才數計算（cm² ÷ 918）</div>
+    <div class="fl2">展開長 = <span class="hl">(外L + 外W) × 2 + 釘接邊</span></div>
+    <div class="fl2">展開寬 = <span class="hl">(外W + 外H) × 2</span>（含上下蓋板）</div>
+    <div class="fl2">才數 = 展開長 × 展開寬 ÷ <span class="hl">918</span></div>
+  </div>
+  <div class="fb">
+    <div class="ft">面積與成本</div>
+    <div class="fl2">面積(m²) = <span class="hl">[(L+W)×2+釘接邊] ÷100 × (W+H)×2 ÷100</span></div>
+    <div class="fl2">含損耗 = 面積 × <span class="hl">1.03</span>（3% 損耗）</div>
+    <div class="fl2">每箱成本 = 含損耗 × <span class="hl">單價</span> × 折扣係數</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--red-lt)">💥</div><div class="card-hd-title">強度計算公式</div></div>
+  <div class="fb">
+    <div class="ft">破裂強度（Bursting Strength）</div>
+    <div class="fl2">破裂強度 = <span class="hl">面紙破裂強度 × 層數係數</span></div>
+    <div class="fl2">三層 ×1.0 ／ 五層 <span class="hl">×1.8</span> ／ 七層 <span class="hl">×2.5</span></div>
+  </div>
+  <div class="fb">
+    <div class="ft">耐壓強度 BCT（McKee 公式）</div>
+    <div class="fl2">BCT = <span class="hl">5.87 × ECT × Z⁰·⁵ × A⁰·²⁵</span></div>
+    <div class="fl2">Z = 周長(cm)，A = 底面積(cm²)</div>
+  </div>
+  <div class="fb">
+    <div class="ft">堆疊層數</div>
+    <div class="fl2">安全承重 = BCT × <span class="hl">0.60</span>（安全係數）</div>
+    <div class="fl2">層數 = 安全承重 ÷ <span class="hl">(重量 × 9.81)</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-icon" style="background:var(--purple-lt);font-size:15px">📊</div>
+  <span class="sec-text">規格對照表</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="card">
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--pink-lt)">🧻</div><div class="card-hd-title">紙質等級對照</div></div>
   <div class="table-wrap">
   <table class="st">
-    <thead><tr><th>訂購量</th><th>折扣</th><th>係數</th></tr></thead>
+    <thead><tr><th>等級</th><th>紙質</th><th>破裂強度</th><th>環壓強度</th><th>用途</th></tr></thead>
     <tbody>
-      <tr><td>&lt; 500 件</td><td>無折扣</td><td>× 1.00</td></tr>
-      <tr><td>500–999 件</td><td>8% OFF</td><td>× 0.92</td></tr>
-      <tr><td>1,000–2,999 件</td><td>15% OFF</td><td>× 0.85</td></tr>
-      <tr><td>≥ 3,000 件</td><td>20% OFF</td><td>× 0.80</td></tr>
+      <tr><td><span class="badge">K-A</span></td><td>牛皮紙·優</td><td>≥1380 kPa</td><td>200</td><td>出口重貨</td></tr>
+      <tr><td><span class="badge">K-B</span></td><td>牛皮紙·標</td><td>≥1200 kPa</td><td>170</td><td>工業重物</td></tr>
+      <tr><td><span class="badge">C-A</span></td><td>瓦楞紙·優</td><td>≥980 kPa</td><td>150</td><td>一般電商</td></tr>
+      <tr><td><span class="badge">C-B</span></td><td>瓦楞紙·標</td><td>≥780 kPa</td><td>120</td><td>零售包裝</td></tr>
+      <tr><td><span class="badge">B-A</span></td><td>再生紙·優</td><td>≥580 kPa</td><td>90</td><td>輕物內箱</td></tr>
+      <tr><td><span class="badge">W</span></td><td>廢紙漿</td><td>≥420 kPa</td><td>70</td><td>低成本</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--blue-lt)">🪵</div><div class="card-hd-title">楞型規格對照</div></div>
+  <div class="table-wrap">
+  <table class="st">
+    <thead><tr><th>楞型</th><th>楞高</th><th>面紙厚</th><th>特性</th></tr></thead>
+    <tbody>
+      <tr><td>A楞</td><td>5 mm</td><td>2 mm</td><td>緩衝佳·五層</td></tr>
+      <tr><td>B楞</td><td>3 mm</td><td>1 mm</td><td>強度高·三層</td></tr>
+      <tr><td>C楞</td><td>4 mm</td><td>2 mm</td><td>通用型·五層</td></tr>
+      <tr><td>E楞</td><td>1.5 mm</td><td>0.5 mm</td><td>彩盒用·三層</td></tr>
+      <tr><td>AB楞</td><td>7.5 mm</td><td>2 mm</td><td>重型·五層</td></tr>
+      <tr><td>F/G楞</td><td>&lt;1 mm</td><td>0.2 mm</td><td>精細印刷</td></tr>
     </tbody>
   </table>
   </div>
 </div>
 
 <div class="footer">
-  © 2026 Packaging Tech · 計算結果供參考，實際報價請洽業務<br>
-  公式參考：<a href="https://lanone100.github.io/cartontools/" style="color:var(--blue)" target="_blank">lanone100 瓦楞紙箱計算器</a>
+  © 2026 Packaging Tech · 計算結果供參考，實際報價請洽業務
 </div>
 
-</div><!-- /page -->
+</div><!-- /view-ref -->
+
+<!-- ══════ 底部 Tab Bar ══════ -->
+<nav class="tab-bar">
+  <button class="tab-btn active" id="tab-calc" onclick="switchTab('calc')">
+    <span class="tab-icon">🧮</span>
+    <span>計算機</span>
+  </button>
+  <button class="tab-btn" id="tab-ref" onclick="switchTab('ref')">
+    <span class="tab-icon">📚</span>
+    <span>公式說明</span>
+  </button>
+</nav>
 
 <script>
 let gradeData={burst:980,ring:150,gsm:160,name:'C-A'};
+
+function switchTab(tab){
+  document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+tab).classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
 function toggleTheme(){
   const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';
@@ -1138,7 +1272,6 @@ function calc(){
   document.getElementById('dOuter').textContent=L>0?f1(L)+'×'+f1(W)+'×'+f1(H)+' cm':'—';
   document.getElementById('dUnfoldDim').textContent=unfL>0?f1(unfL)+'×'+f1(unfW)+' cm':'—';
   document.getElementById('dRate').textContent=hasRate?'NT$ '+rate.toFixed(2)+' / m²':'未輸入';
-  document.getElementById('dDisc').textContent=discText;
   document.getElementById('dGrade').textContent=gradeData.name;
   document.getElementById('dBurst').textContent=Math.round(burst)+' kPa';
   document.getElementById('dBCT').textContent=!isNaN(bct)?Math.round(bct)+' N':'需輸入尺寸';
