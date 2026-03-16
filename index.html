@@ -339,30 +339,46 @@ body{
 
 /* ═══════════════════════════════ RATE ═══════════════════════════════ */
 .rate-wrap{
-  display:flex;align-items:center;gap:10px;
-  background:var(--bg-input);border-radius:var(--r-sm);
+  display:flex;align-items:center;
+  background:var(--bg-input);
+  border-radius:var(--r-sm);
   border:2px solid var(--border);
-  padding:5px 5px 5px 16px;
+  padding:0 0 0 14px;
+  overflow:hidden;
   transition:border .2s,box-shadow .2s;
+  min-width:0;
 }
-.rate-wrap:focus-within{border-color:var(--orange);box-shadow:0 0 0 3.5px rgba(255,149,0,.15)}
-.rate-prefix{font-size:14px;font-weight:700;color:var(--txt2);white-space:nowrap}
+.rate-wrap:focus-within{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,149,0,.15)}
+.rate-prefix{
+  font-size:15px;font-weight:700;color:var(--txt2);
+  white-space:nowrap;flex-shrink:0;padding-right:4px;
+}
 .rate-wrap input{
-  flex:1;border:none!important;background:transparent!important;
-  box-shadow:none!important;padding:10px 0!important;
-  font-size:26px!important;font-weight:700!important;
-  color:var(--orange)!important;text-align:right;
+  flex:1;min-width:0;
+  border:none!important;background:transparent!important;
+  box-shadow:none!important;
+  padding:14px 6px 14px 0!important;
+  font-size:22px!important;font-weight:700!important;
+  color:var(--orange)!important;
+  text-align:left!important;
   font-family:'Noto Sans TC',sans-serif;
+  width:100%;
+  -webkit-appearance:none;
 }
-.rate-suf{font-size:13px;color:var(--txt3);white-space:nowrap;padding-right:14px}
-.rate-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;align-items:center}
+.rate-suf{
+  font-size:13px;color:var(--txt3);
+  white-space:nowrap;padding:14px 14px 14px 4px;
+  flex-shrink:0;
+}
+.rate-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
 .rc{
-  padding:5px 12px;border-radius:20px;
+  padding:5px 11px;border-radius:20px;
   border:1.5px solid var(--border);
   background:var(--bg-card);
   color:var(--txt2);font-size:12px;font-weight:700;
   font-family:'Noto Sans TC',sans-serif;
   cursor:pointer;transition:transform .12s,background .15s,color .15s,border-color .15s;
+  white-space:nowrap;flex-shrink:0;
 }
 .rc:active{transform:scale(.90)}
 .rc:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
@@ -539,11 +555,12 @@ body{
   .sg-num{font-size:22px}
   .nav{padding:0 12px}
   .nav-title{font-size:15px}
-  .rate-wrap input{font-size:22px!important}
+  .rate-wrap input{font-size:18px!important}
   .fc-grid,.gc-grid{gap:6px}
   .fc,.gc{padding:10px 7px 8px}
   .fc-thick{font-size:18px}
   .gc-kpa{font-size:14px}
+  .chip-row,.rate-chips,.qty-chips{gap:5px}
 }
 
 /* 手機 360–539px */
