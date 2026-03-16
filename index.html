@@ -3,556 +3,953 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>紙箱報價 Pro</title>
+<title>瓦楞紙箱計算器</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --r-sm:10px;--r-md:16px;--r-lg:22px;--r-xl:30px;
-  --bg-page:#F2F2F7;--bg-card:#FFFFFF;--bg-input:#F2F2F7;
-  --bg-sheet:rgba(255,255,255,0.85);
-  --a1:#007AFF;--a2:#5856D6;--a3:#FF9500;--a4:#34C759;--a5:#FF2D55;--a6:#AF52DE;
-  --grad-hero:linear-gradient(135deg,#007AFF 0%,#0055D4 100%);
-  --grad-green:linear-gradient(135deg,#34C759,#27AE52);
-  --txt:#1C1C1E;--txt2:#636366;--txt3:#AEAEB2;
-  --border:rgba(60,60,67,0.13);
-  --sh-sm:0 2px 10px rgba(0,0,0,0.07);
-  --sh-md:0 8px 30px rgba(0,0,0,0.11);
-  --sh-lg:0 20px 60px rgba(0,0,0,0.16);
+/* ═══════════════════════════════
+   設計系統 Design System
+═══════════════════════════════ */
+:root{
+  /* 圓角 */
+  --r-xs:8px; --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:32px;
+
+  /* 淺色主題 */
+  --bg-page:#F2F2F7;
+  --bg-card:#FFFFFF;
+  --bg-input:#F2F2F7;
+  --bg-elevated:rgba(255,255,255,0.9);
+
+  /* 品牌色彩 */
+  --blue:#007AFF;    --blue-lt:rgba(0,122,255,.10);
+  --teal:#00C7BE;    --teal-lt:rgba(0,199,190,.10);
+  --green:#34C759;   --green-lt:rgba(52,199,89,.10);
+  --orange:#FF9500;  --orange-lt:rgba(255,149,0,.10);
+  --red:#FF3B30;     --red-lt:rgba(255,59,48,.10);
+  --pink:#FF2D55;    --pink-lt:rgba(255,45,85,.10);
+  --purple:#AF52DE;  --purple-lt:rgba(175,82,222,.10);
+  --indigo:#5856D6;
+
+  /* 漸層 */
+  --grad-nav:    linear-gradient(135deg,#1A56DB 0%,#0A84FF 50%,#00C7BE 100%);
+  --grad-result: linear-gradient(135deg,#FF6B00 0%,#FF3B30 50%,#FF2D55 100%);
+  --grad-flute:  linear-gradient(135deg,#007AFF 0%,#5856D6 100%);
+  --grad-grade:  linear-gradient(135deg,#FF3B30 0%,#FF2D55 100%);
+  --grad-size:   linear-gradient(135deg,#00C7BE 0%,#34C759 100%);
+  --grad-rate:   linear-gradient(135deg,#FF9500 0%,#FF6B00 100%);
+  --grad-qty:    linear-gradient(135deg,#34C759 0%,#00C7BE 100%);
+  --grad-green:  linear-gradient(135deg,#34C759,#27AE52);
+
+  /* 文字 */
+  --txt:#1C1C1E; --txt2:#636366; --txt3:#AEAEB2;
+
+  /* 邊框與陰影 */
+  --border:rgba(60,60,67,0.12);
+  --sh-xs:0 1px 4px rgba(0,0,0,0.06);
+  --sh-sm:0 2px 12px rgba(0,0,0,0.08);
+  --sh-md:0 8px 32px rgba(0,0,0,0.12);
+  --sh-lg:0 20px 64px rgba(0,0,0,0.18);
 }
+
 [data-theme="dark"]{
-  --bg-page:#000;--bg-card:#1C1C1E;--bg-input:#2C2C2E;
-  --bg-sheet:rgba(28,28,30,0.92);
-  --a1:#0A84FF;--a2:#5E5CE6;--a3:#FF9F0A;--a4:#30D158;--a5:#FF375F;--a6:#BF5AF2;
-  --grad-hero:linear-gradient(135deg,#0A84FF 0%,#0055D4 100%);
-  --grad-green:linear-gradient(135deg,#30D158,#25AA47);
-  --txt:#F5F5F7;--txt2:#AEAEB2;--txt3:#636366;
+  --bg-page:#000000;
+  --bg-card:#1C1C1E;
+  --bg-input:#2C2C2E;
+  --bg-elevated:rgba(44,44,46,0.95);
+
+  --blue:#0A84FF;    --blue-lt:rgba(10,132,255,.14);
+  --teal:#5AC8FA;    --teal-lt:rgba(90,200,250,.12);
+  --green:#30D158;   --green-lt:rgba(48,209,88,.12);
+  --orange:#FF9F0A;  --orange-lt:rgba(255,159,10,.12);
+  --red:#FF453A;     --red-lt:rgba(255,69,58,.12);
+  --pink:#FF375F;    --pink-lt:rgba(255,55,95,.12);
+  --purple:#BF5AF2;  --purple-lt:rgba(191,90,242,.12);
+  --indigo:#5E5CE6;
+
+  --grad-nav:    linear-gradient(135deg,#0A3D8A 0%,#0A84FF 50%,#5AC8FA 100%);
+  --grad-result: linear-gradient(135deg,#CC4400 0%,#FF453A 50%,#FF375F 100%);
+  --grad-flute:  linear-gradient(135deg,#0A84FF 0%,#5E5CE6 100%);
+  --grad-grade:  linear-gradient(135deg,#FF453A 0%,#FF375F 100%);
+  --grad-size:   linear-gradient(135deg,#5AC8FA 0%,#30D158 100%);
+  --grad-rate:   linear-gradient(135deg,#FF9F0A 0%,#FF6B00 100%);
+  --grad-qty:    linear-gradient(135deg,#30D158 0%,#5AC8FA 100%);
+  --grad-green:  linear-gradient(135deg,#30D158,#25AA47);
+
+  --txt:#F5F5F7; --txt2:#AEAEB2; --txt3:#48484A;
   --border:rgba(255,255,255,0.10);
-  --sh-sm:0 2px 10px rgba(0,0,0,0.3);
-  --sh-md:0 8px 30px rgba(0,0,0,0.42);
-  --sh-lg:0 20px 60px rgba(0,0,0,0.55);
+  --sh-xs:0 1px 4px rgba(0,0,0,0.2);
+  --sh-sm:0 2px 12px rgba(0,0,0,0.3);
+  --sh-md:0 8px 32px rgba(0,0,0,0.44);
+  --sh-lg:0 20px 64px rgba(0,0,0,0.56);
 }
+
+/* ═══════════════════════════════ BASE ═══════════════════════════════ */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
-body{background:var(--bg-page);color:var(--txt);font-family:'Noto Sans TC',-apple-system,sans-serif;min-height:100vh;transition:background .3s,color .3s}
+body{
+  background:var(--bg-page);color:var(--txt);
+  font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;
+  min-height:100vh;transition:background .35s,color .35s;
+  -webkit-font-smoothing:antialiased;
+}
 
-.nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--grad-hero);box-shadow:0 4px 20px rgba(0,122,255,.3);position:relative;overflow:hidden}
-.nav::before{content:'';position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
-.nav-l .nt{font-size:18px;font-weight:700;letter-spacing:-.01em;color:#fff}
-.nav-l .ns{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px}
-.tbtn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:30px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);color:#fff;font-size:13px;font-weight:600;font-family:'Noto Sans TC',sans-serif;cursor:pointer;transition:transform .15s,background .15s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.tbtn:hover{background:rgba(255,255,255,.26)}
-.tbtn:active{transform:scale(.93)}
+/* ═══════════════════════════════ NAV ═══════════════════════════════ */
+.nav{
+  position:sticky;top:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 18px;height:58px;
+  background:var(--grad-nav);
+  box-shadow:0 2px 20px rgba(0,100,255,.3);
+  overflow:hidden;
+}
+.nav::after{
+  content:'';position:absolute;
+  right:-40px;top:-40px;
+  width:180px;height:180px;border-radius:50%;
+  background:rgba(255,255,255,.06);pointer-events:none;
+}
+.nav::before{
+  content:'';position:absolute;
+  left:-20px;bottom:-50px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(255,255,255,.04);pointer-events:none;
+}
+.nav-title{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.015em;position:relative;z-index:1}
+.theme-btn{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:6px;
+  padding:7px 16px;
+  border-radius:30px;
+  border:1.5px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  color:#fff;font-size:13px;font-weight:600;
+  font-family:'Noto Sans TC',sans-serif;
+  cursor:pointer;transition:transform .15s,background .2s;
+}
+.theme-btn:active{transform:scale(.93)}
+.theme-btn:hover{background:rgba(255,255,255,.28)}
 
-.page{max-width:620px;margin:0 auto;padding:18px 15px 90px}
+/* ═══════════════════════════════ PAGE ═══════════════════════════════ */
+.page{max-width:600px;margin:0 auto;padding:16px 14px 100px}
 
-.hero{background:var(--grad-hero);border-radius:var(--r-xl);padding:22px 22px 20px;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:var(--sh-md)}
-.hero::before{content:'';position:absolute;right:-28px;top:-28px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.07)}
-.hero::after{content:'';position:absolute;right:28px;bottom:-38px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.04)}
-.h-tag{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.68);margin-bottom:4px}
-.h-title{font-size:26px;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.15}
-.h-sub{font-size:13px;color:rgba(255,255,255,.72);margin-top:7px}
+/* ═══════════════════════════════ SECTION HEADER ═══════════════════════ */
+.sec{
+  display:flex;align-items:center;gap:10px;
+  margin:20px 0 10px;
+}
+.sec-icon{
+  width:32px;height:32px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.sec-text{font-size:13px;font-weight:700;color:var(--txt);letter-spacing:.01em}
+.sec-line{flex:1;height:.5px;background:var(--border)}
 
-.card{background:var(--bg-card);border-radius:var(--r-lg);padding:17px;margin-bottom:11px;box-shadow:var(--sh-sm);border:.5px solid var(--border);transition:background .3s}
-.ct{font-size:12px;font-weight:700;color:var(--txt2);letter-spacing:.05em;text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:6px}
-.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.db{background:var(--a1)}.dp{background:var(--a2)}.do{background:var(--a3)}.dg{background:var(--a4)}.dr2{background:var(--a5)}.dv{background:var(--a1)}
+/* ═══════════════════════════════ CARD ═══════════════════════════════ */
+.card{
+  background:var(--bg-card);
+  border-radius:var(--r-lg);
+  padding:18px 16px;
+  margin-bottom:12px;
+  box-shadow:var(--sh-sm);
+  border:.5px solid var(--border);
+  transition:background .35s,border-color .35s;
+}
+.card-hd{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:14px;
+}
+.card-hd-icon{
+  width:28px;height:28px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.card-hd-title{font-size:14px;font-weight:700;color:var(--txt);letter-spacing:-.005em}
 
-.fg2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+/* 各卡片配色 */
+.hd-blue   .card-hd-icon{background:var(--blue-lt)}
+.hd-red    .card-hd-icon{background:var(--red-lt)}
+.hd-teal   .card-hd-icon{background:var(--teal-lt)}
+.hd-orange .card-hd-icon{background:var(--orange-lt)}
+.hd-green  .card-hd-icon{background:var(--green-lt)}
+
+/* ═══════════════════════════════ INPUTS ═══════════════════════════════ */
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .fw{display:flex;flex-direction:column;gap:5px}
-.fl{font-size:12px;color:var(--txt2);font-weight:500}
+.fl{font-size:12px;font-weight:600;color:var(--txt2);letter-spacing:.01em}
 .iw{position:relative}
-.iw input,.iw select{width:100%;padding:12px 36px 12px 13px;border-radius:var(--r-sm);border:1.5px solid var(--border);background:var(--bg-input);color:var(--txt);font-size:16px;font-weight:500;font-family:'Noto Sans TC',sans-serif;outline:none;-webkit-appearance:none;transition:border .2s,box-shadow .2s,background .3s}
-.iw input:focus,.iw select:focus{border-color:var(--a1);box-shadow:0 0 0 3px rgba(0,122,255,.16)}
-.utag{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--txt3);pointer-events:none;font-weight:500}
+.iw input{
+  width:100%;padding:13px 38px 13px 14px;
+  border-radius:var(--r-sm);
+  border:1.5px solid var(--border);
+  background:var(--bg-input);color:var(--txt);
+  font-size:16px;font-weight:500;
+  font-family:'Noto Sans TC',sans-serif;
+  outline:none;-webkit-appearance:none;
+  transition:border .2s,box-shadow .2s,background .35s;
+}
+.iw input:focus{border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,122,255,.15)}
+.utag{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:12px;color:var(--txt3);font-weight:500;pointer-events:none;
+}
 
-.qrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;align-items:center}
-.ql{font-size:12px;color:var(--txt3);white-space:nowrap}
-.qb{padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--bg-input);color:var(--a1);font-size:12px;font-weight:600;font-family:'Noto Sans TC',sans-serif;cursor:pointer;transition:transform .12s,background .15s,border-color .15s;white-space:nowrap}
-.qb:active{transform:scale(.91)}
-.qb:hover{background:var(--a1);color:#fff;border-color:var(--a1)}
+/* 快速填入按鈕 */
+.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;align-items:center}
+.chip-lbl{font-size:11px;color:var(--txt3);white-space:nowrap}
+.chip{
+  padding:6px 13px;border-radius:20px;
+  border:1.5px solid var(--border);
+  background:var(--bg-input);
+  color:var(--blue);font-size:12px;font-weight:700;
+  font-family:'Noto Sans TC',sans-serif;
+  cursor:pointer;white-space:nowrap;
+  transition:transform .12s,background .15s,border-color .15s,color .15s;
+}
+.chip:active{transform:scale(.90)}
+.chip:hover,.chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 
-/* 楞型卡片 */
-.flute-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.fc{border:2px solid var(--border);border-radius:var(--r-md);padding:12px 10px 10px;cursor:pointer;transition:border-color .2s,transform .12s,background .2s;background:var(--bg-input)}
-.fc:active{transform:scale(.95)}
-.fc.sel{border-color:var(--a1);background:rgba(0,122,255,.06);box-shadow:0 0 0 1px var(--a1)}
-[data-theme="dark"] .fc.sel{background:rgba(10,132,255,.12)}
-.fc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+/* ═══════════════════════════════ FLUTE CARDS ═══════════════════════════ */
+.fc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fc{
+  border:2px solid var(--border);
+  border-radius:var(--r-md);
+  padding:12px 10px 10px;
+  cursor:pointer;background:var(--bg-input);
+  transition:border-color .2s,transform .12s,background .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.fc::after{
+  content:'';position:absolute;bottom:-16px;right:-16px;
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(0,122,255,.06);
+  transition:background .2s;
+}
+.fc:active{transform:scale(.94)}
+.fc.sel{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 4px 16px rgba(0,122,255,.18)}
+[data-theme="dark"] .fc.sel{background:rgba(10,132,255,.10)}
+.fc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
 .fc-name{font-size:14px;font-weight:700;color:var(--txt)}
-.fc-ck{width:18px;height:18px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:background .2s,color .2s;flex-shrink:0}
-.fc.sel .fc-ck{background:var(--a1);color:#fff}
-.fc-thick{font-size:20px;font-weight:700;color:var(--a1);line-height:1.1}
-.fc-desc{font-size:11px;color:var(--txt2);margin-top:2px;line-height:1.35}
+.fc-check{
+  width:19px;height:19px;border-radius:50%;
+  background:var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:transparent;
+  transition:background .2s,color .2s;flex-shrink:0;
+}
+.fc.sel .fc-check{background:var(--blue);color:#fff}
+.fc-thick{font-size:21px;font-weight:700;color:var(--blue);line-height:1.1}
+.fc-desc{font-size:11px;color:var(--txt2);margin-top:2px;line-height:1.3}
 
-/* 紙質等級卡片 */
-.grade-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:11px}
-.gc{border:2px solid var(--border);border-radius:var(--r-md);padding:10px 9px 8px;cursor:pointer;transition:border-color .2s,transform .12s,background .2s;background:var(--bg-input);position:relative}
-.gc:active{transform:scale(.95)}
-.gc.sel{border-color:var(--a5);background:rgba(255,45,85,.05);box-shadow:0 0 0 1px var(--a5)}
+/* 楞型厚度輸入 */
+.thick-inputs{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:.5px solid var(--border);
+}
+
+/* ═══════════════════════════════ GRADE CARDS ═══════════════════════════ */
+.gc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.gc{
+  border:2px solid var(--border);
+  border-radius:var(--r-md);
+  padding:11px 9px 9px;
+  cursor:pointer;background:var(--bg-input);
+  transition:border-color .2s,transform .12s,background .2s,box-shadow .2s;
+}
+.gc:active{transform:scale(.94)}
+.gc.sel{border-color:var(--pink);box-shadow:0 0 0 1px var(--pink),0 4px 16px rgba(255,45,85,.18)}
 [data-theme="dark"] .gc.sel{background:rgba(255,55,95,.10)}
 .gc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
 .gc-name{font-size:13px;font-weight:700;color:var(--txt)}
-.gc-ck{width:17px;height:17px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;transition:background .2s,color .2s;flex-shrink:0}
-.gc.sel .gc-ck{background:var(--a5);color:#fff}
-.gc-burst{font-size:17px;font-weight:700;color:var(--a5);line-height:1.1}
-.gc-desc{font-size:10px;color:var(--txt2);margin-top:1px;line-height:1.35}
-.gc-tag{display:inline-block;margin-top:4px;padding:1px 7px;border-radius:5px;font-size:10px;font-weight:600;background:rgba(255,45,85,.10);color:var(--a5)}
-.gc.sel .gc-tag{background:var(--a5);color:#fff}
+.gc-ck{
+  width:17px;height:17px;border-radius:50%;
+  background:var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;color:transparent;
+  transition:background .2s,color .2s;flex-shrink:0;
+}
+.gc.sel .gc-ck{background:var(--pink);color:#fff}
+.gc-kpa{font-size:16px;font-weight:700;color:var(--pink);line-height:1.1}
+.gc-desc{font-size:10px;color:var(--txt2);margin-top:1px;line-height:1.3}
+.gc-tag{
+  display:inline-block;margin-top:4px;
+  padding:1px 7px;border-radius:5px;
+  font-size:10px;font-weight:700;
+  background:var(--pink-lt);color:var(--pink);
+  transition:background .2s,color .2s;
+}
+.gc.sel .gc-tag{background:var(--pink);color:#fff}
 
-/* 強度結果卡 */
-.strength-card{background:var(--bg-card);border-radius:var(--r-lg);padding:17px;margin-bottom:11px;box-shadow:var(--sh-sm);border:.5px solid var(--border)}
-.strength-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
-.sg-cell{background:var(--bg-input);border-radius:var(--r-md);padding:14px 13px;border:1.5px solid var(--border);position:relative;overflow:hidden}
-.sg-cell::before{content:'';position:absolute;top:-10px;right:-10px;width:50px;height:50px;border-radius:50%;opacity:.07}
-.sg-burst::before{background:var(--a5)}
-.sg-comp::before{background:var(--a1)}
-.sg-label{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
-.sg-burst .sg-label{color:var(--a5)}
-.sg-comp .sg-label{color:var(--a1)}
-.sg-val{font-size:26px;font-weight:700;line-height:1.1}
-.sg-burst .sg-val{color:var(--a5)}
-.sg-comp .sg-val{color:var(--a1)}
-.sg-unit{font-size:12px;color:var(--txt2);margin-top:2px}
-.sg-grade{font-size:11px;margin-top:6px;padding:2px 8px;border-radius:6px;display:inline-block;font-weight:600}
-.grade-pass{background:rgba(52,199,89,.12);color:var(--a4)}
-.grade-warn{background:rgba(255,149,0,.12);color:var(--a3)}
-.grade-fail{background:rgba(255,45,85,.12);color:var(--a5)}
+/* 強度結果雙格 */
+.strength-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.sg{
+  border-radius:var(--r-md);
+  padding:14px 13px;
+  position:relative;overflow:hidden;
+  border:.5px solid var(--border);
+}
+.sg-burst{background:linear-gradient(135deg,rgba(255,59,48,.08),rgba(255,45,85,.06))}
+.sg-comp{background:linear-gradient(135deg,rgba(0,122,255,.08),rgba(88,86,214,.06))}
+[data-theme="dark"] .sg-burst{background:linear-gradient(135deg,rgba(255,69,58,.13),rgba(255,55,95,.09))}
+[data-theme="dark"] .sg-comp{background:linear-gradient(135deg,rgba(10,132,255,.13),rgba(94,92,230,.09))}
+.sg-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px}
+.sg-burst .sg-lbl{color:var(--red)}
+.sg-comp .sg-lbl{color:var(--blue)}
+.sg-num{font-size:28px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.sg-burst .sg-num{color:var(--red)}
+.sg-comp .sg-num{color:var(--blue)}
+.sg-unit{font-size:11px;color:var(--txt2);margin-top:3px}
+.sg-badge{
+  display:inline-block;margin-top:7px;
+  padding:2px 8px;border-radius:6px;
+  font-size:10px;font-weight:700;
+}
+.grade-p{background:var(--green-lt);color:var(--green)}
+.grade-w{background:var(--orange-lt);color:var(--orange)}
+.grade-f{background:var(--red-lt);color:var(--red)}
 
-/* 自訂費率 */
-.rate-box{background:var(--bg-input);border-radius:var(--r-md);border:2px solid var(--border);padding:4px 4px 4px 14px;display:flex;align-items:center;gap:8px;transition:border .2s,box-shadow .2s}
-.rate-box:focus-within{border-color:var(--a3);box-shadow:0 0 0 3px rgba(255,149,0,.14)}
-.rate-lbl{font-size:14px;font-weight:600;color:var(--txt2);white-space:nowrap}
-.rate-box input{flex:1;border:none!important;background:transparent!important;box-shadow:none!important;padding:11px 0!important;font-size:24px!important;font-weight:700!important;color:var(--a3)!important;text-align:right}
-.rate-unit{font-size:13px;color:var(--txt3);white-space:nowrap;padding-right:12px}
-.rate-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
-.rb{padding:5px 11px;border-radius:20px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--txt2);font-size:11px;font-weight:600;font-family:'Noto Sans TC',sans-serif;cursor:pointer;transition:transform .12s,background .15s}
-.rb:active{transform:scale(.91)}
-.rb:hover{background:var(--a3);color:#fff;border-color:var(--a3)}
-.rate-hint{font-size:11px;color:var(--txt3);margin-top:7px}
+/* 堆疊估算 */
+.stack-row{
+  display:flex;gap:10px;
+  padding:12px 14px;
+  background:var(--bg-input);
+  border-radius:var(--r-sm);
+  border:.5px solid var(--border);
+  align-items:center;
+}
+.stack-input{flex:1}
+.stack-result{
+  flex:1;
+  background:var(--bg-card);
+  border-radius:var(--r-xs);
+  border:1px solid var(--border);
+  padding:11px 12px;
+  font-size:20px;font-weight:700;color:var(--blue);
+  min-height:46px;display:flex;align-items:center;
+}
 
-/* Stepper */
-.stepper{display:flex;align-items:center;background:var(--bg-input);border-radius:var(--r-sm);border:1.5px solid var(--border);overflow:hidden}
-.stepper button{width:48px;height:50px;border:none;background:transparent;color:var(--a1);font-size:24px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
-.stepper button:active{background:rgba(0,122,255,.12)}
-.stepper input{flex:1;border:none!important;background:transparent!important;box-shadow:none!important;text-align:center;padding:0!important;font-size:18px!important;font-weight:700!important}
-.qp-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;align-items:center}
-.qp{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:var(--bg-input);color:var(--txt2);font-size:12px;font-weight:500;font-family:'Noto Sans TC',sans-serif;cursor:pointer;transition:transform .12s,background .15s}
-.qp.on{background:var(--a1);color:#fff;border-color:var(--a1)}
+/* ═══════════════════════════════ RATE ═══════════════════════════════ */
+.rate-wrap{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg-input);border-radius:var(--r-sm);
+  border:2px solid var(--border);
+  padding:5px 5px 5px 16px;
+  transition:border .2s,box-shadow .2s;
+}
+.rate-wrap:focus-within{border-color:var(--orange);box-shadow:0 0 0 3.5px rgba(255,149,0,.15)}
+.rate-prefix{font-size:14px;font-weight:700;color:var(--txt2);white-space:nowrap}
+.rate-wrap input{
+  flex:1;border:none!important;background:transparent!important;
+  box-shadow:none!important;padding:10px 0!important;
+  font-size:26px!important;font-weight:700!important;
+  color:var(--orange)!important;text-align:right;
+  font-family:'Noto Sans TC',sans-serif;
+}
+.rate-suf{font-size:13px;color:var(--txt3);white-space:nowrap;padding-right:14px}
+.rate-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;align-items:center}
+.rc{
+  padding:5px 12px;border-radius:20px;
+  border:1.5px solid var(--border);
+  background:var(--bg-card);
+  color:var(--txt2);font-size:12px;font-weight:700;
+  font-family:'Noto Sans TC',sans-serif;
+  cursor:pointer;transition:transform .12s,background .15s,color .15s,border-color .15s;
+}
+.rc:active{transform:scale(.90)}
+.rc:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.rate-note{font-size:11px;color:var(--txt3);margin-top:7px}
 
-/* 結果 Hero */
-.rh{background:var(--grad-hero);border-radius:var(--r-xl);padding:22px 22px 18px;box-shadow:var(--sh-lg);position:relative;overflow:hidden;margin-bottom:11px}
-.rh::before{content:'';position:absolute;right:-18px;top:-18px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
-.rh-lbl{font-size:11px;color:rgba(255,255,255,.7);letter-spacing:.06em;text-transform:uppercase}
-.rh-price{font-size:46px;font-weight:700;color:#fff;letter-spacing:-.03em;line-height:1.1;margin:4px 0}
-.rh-price sup{font-size:18px;font-weight:500;vertical-align:super;margin-right:2px}
-.disc-pill{display:inline-flex;align-items:center;gap:4px;background:var(--grad-green);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:8px;letter-spacing:.02em}
-.disc-pill.hide{opacity:0;pointer-events:none}
-.rh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
-.rh-cell{background:rgba(255,255,255,.13);border-radius:var(--r-sm);padding:9px 12px}
-.rh-ck{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:3px}
-.rh-cv{font-size:15px;font-weight:700;color:#fff;word-break:break-all}
+/* ═══════════════════════════════ STEPPER ═══════════════════════════════ */
+.stepper{
+  display:flex;align-items:center;
+  background:var(--bg-input);
+  border-radius:var(--r-sm);
+  border:1.5px solid var(--border);
+  overflow:hidden;
+}
+.stepper button{
+  width:52px;height:52px;border:none;background:transparent;
+  color:var(--green);font-size:26px;font-weight:700;
+  cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;
+}
+.stepper button:active{background:var(--green-lt)}
+.stepper input{
+  flex:1;border:none!important;background:transparent!important;
+  box-shadow:none!important;text-align:center;
+  padding:0!important;font-size:20px!important;font-weight:700!important;
+}
+.qty-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;align-items:center}
+.qp{
+  padding:5px 14px;border-radius:20px;
+  border:1.5px solid var(--border);
+  background:var(--bg-input);color:var(--txt2);
+  font-size:12px;font-weight:600;
+  font-family:'Noto Sans TC',sans-serif;
+  cursor:pointer;transition:transform .12s,background .15s,color .15s;
+}
+.qp.on{background:var(--green);color:#fff;border-color:var(--green)}
 
-/* Detail */
-.dc{background:var(--bg-card);border-radius:var(--r-lg);padding:17px;box-shadow:var(--sh-sm);border:.5px solid var(--border);margin-bottom:11px;transition:background .3s}
-.dr{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--border);font-size:14px;gap:8px}
+/* ═══════════════════════════════ RESULT CARD ═══════════════════════════ */
+.result-card{
+  background:var(--grad-result);
+  border-radius:var(--r-xl);
+  padding:22px 20px 18px;
+  box-shadow:0 12px 40px rgba(255,59,48,.28);
+  position:relative;overflow:hidden;
+  margin-bottom:12px;
+}
+.result-card::before{
+  content:'';position:absolute;
+  right:-36px;top:-36px;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(255,255,255,.07);
+}
+.result-card::after{
+  content:'';position:absolute;
+  left:-20px;bottom:-40px;
+  width:130px;height:130px;border-radius:50%;
+  background:rgba(255,255,255,.04);
+}
+.rc-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.rc-lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.disc-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.22);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  color:#fff;font-size:11px;font-weight:700;
+  padding:4px 11px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.3);
+}
+.disc-pill.hide{display:none}
+.rc-price{
+  font-size:52px;font-weight:700;color:#fff;
+  letter-spacing:-.03em;line-height:1;
+  margin:6px 0 0;position:relative;z-index:1;
+}
+.rc-price sup{font-size:20px;font-weight:500;vertical-align:super;margin-right:1px}
+.rc-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  margin-top:16px;position:relative;z-index:1;
+}
+.rc-cell{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  border-radius:var(--r-sm);
+  padding:10px 12px;
+  border:1px solid rgba(255,255,255,.2);
+}
+.rc-ck{font-size:10px;color:rgba(255,255,255,.72);font-weight:600;letter-spacing:.04em;margin-bottom:3px}
+.rc-cv{font-size:15px;font-weight:700;color:#fff;word-break:break-all}
+
+/* ═══════════════════════════════ DETAIL TABLE ═══════════════════════════ */
+.detail{
+  background:var(--bg-card);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  box-shadow:var(--sh-sm);
+  border:.5px solid var(--border);
+  margin-bottom:12px;
+}
+.detail-hd{
+  padding:13px 16px;
+  background:linear-gradient(135deg,rgba(0,199,190,.08),rgba(52,199,89,.06));
+  border-bottom:.5px solid var(--border);
+  font-size:13px;font-weight:700;color:var(--txt);
+  display:flex;align-items:center;gap:7px;
+}
+.dr{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 16px;
+  border-bottom:.5px solid var(--border);
+  font-size:14px;gap:8px;
+  transition:background .15s;
+}
 .dr:last-child{border-bottom:none}
-.dk{color:var(--txt2);display:flex;align-items:center;gap:5px;white-space:nowrap}
-.dv{font-weight:600;color:var(--txt);text-align:right;word-break:break-all}
-.badge{font-size:11px;padding:2px 9px;border-radius:7px;font-weight:600}
-.bb{background:rgba(0,122,255,.11);color:var(--a1)}
-.bo{background:rgba(255,149,0,.11);color:var(--a3)}
-.bg{background:rgba(52,199,89,.11);color:var(--a4)}
-.br{background:rgba(255,45,85,.11);color:var(--a5)}
+.dr:hover{background:var(--bg-input)}
+.dk{color:var(--txt2);display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:13px}
+.dv{font-weight:700;color:var(--txt);text-align:right;word-break:break-all;font-size:13px}
 
-/* Formula */
-.fb{background:var(--bg-input);border-radius:var(--r-md);padding:13px 15px;margin-top:11px;border:1.5px solid var(--border)}
-.ft{font-size:11px;font-weight:700;color:var(--txt2);letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px}
-.fl2{font-size:13px;color:var(--txt);padding:5px 0;border-bottom:.5px solid var(--border);line-height:1.6}
+/* ═══════════════════════════════ FORMULA BOXES ═══════════════════════════ */
+.fb{
+  background:var(--bg-input);border-radius:var(--r-sm);
+  padding:13px 14px;margin-top:10px;
+  border:.5px solid var(--border);
+}
+.ft{
+  font-size:10px;font-weight:700;color:var(--txt3);
+  letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px;
+}
+.fl2{
+  font-size:13px;color:var(--txt);
+  padding:5px 0;border-bottom:.5px solid var(--border);line-height:1.6;
+}
 .fl2:last-child{border-bottom:none}
-.hl{color:var(--a1);font-weight:600}
+.hl{color:var(--blue);font-weight:700}
 
-.st{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
-.st th{text-align:left;padding:9px 10px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--txt3);border-bottom:1.5px solid var(--border)}
+/* ═══════════════════════════════ TABLES ═══════════════════════════════ */
+.st{width:100%;border-collapse:collapse;font-size:13px}
+.st th{
+  text-align:left;padding:9px 10px;
+  font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--txt3);border-bottom:1.5px solid var(--border);
+}
 .st td{padding:11px 10px;border-bottom:.5px solid var(--border);color:var(--txt)}
 .st tr:last-child td{border-bottom:none}
 .st tr:hover td{background:var(--bg-input)}
+.badge{
+  display:inline-block;padding:2px 9px;border-radius:6px;
+  font-size:11px;font-weight:700;
+  background:var(--orange-lt);color:var(--orange);
+}
 
-.sdiv{display:flex;align-items:center;gap:10px;margin:18px 0 10px}
-.sdiv span{font-size:12px;font-weight:700;color:var(--txt3);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-.sdiv::before,.sdiv::after{content:'';flex:1;height:.5px;background:var(--border)}
+/* ═══════════════════════════════ FOOTER ═══════════════════════════════ */
+.footer{
+  text-align:center;margin-top:24px;
+  font-size:11px;color:var(--txt3);line-height:1.9;
+  padding-bottom:env(safe-area-inset-bottom,20px);
+}
 
-.footer{text-align:center;margin-top:22px;font-size:11px;color:var(--txt3);padding-bottom:env(safe-area-inset-bottom,16px);line-height:1.8}
+/* ═══════════════════════════════ ANIMATIONS ═══════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.03)}100%{transform:scale(1)}}
+.card,.detail,.result-card{animation:fadeUp .4s cubic-bezier(.22,.68,0,1.2) both}
+.card:nth-child(1){animation-delay:.04s}
+.card:nth-child(2){animation-delay:.08s}
+.card:nth-child(3){animation-delay:.12s}
+.card:nth-child(4){animation-delay:.16s}
+.card:nth-child(5){animation-delay:.20s}
+.pop{animation:pop .24s ease}
 
-@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.card,.rh,.dc{animation:up .38s ease both}
-@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.034)}100%{transform:scale(1)}}
-.pop{animation:pop .22s ease}
-
-@media(max-width:360px){.h-title{font-size:22px}.rh-price{font-size:38px}.flute-grid{grid-template-columns:1fr 1fr}}
-@media(min-width:600px){.page{padding:22px 20px 80px}.h-title{font-size:30px}.rh-price{font-size:52px}.flute-grid{grid-template-columns:repeat(6,1fr)}}
+/* ═══════════════════════════════ RESPONSIVE ═══════════════════════════ */
+@media(max-width:360px){
+  .rc-price{font-size:42px}
+  .fc-grid{grid-template-columns:1fr 1fr 1fr}
+  .rc-grid{grid-template-columns:1fr 1fr}
+}
+@media(min-width:540px){
+  .page{padding:18px 18px 100px}
+  .rc-price{font-size:58px}
+  .fc-grid{grid-template-columns:repeat(6,1fr)}
+  .gc-grid{grid-template-columns:repeat(6,1fr)}
+}
+@media(min-width:640px){
+  .page{max-width:620px}
+  .nav{padding:0 24px}
+}
 </style>
 </head>
 <body>
 
+<!-- ── 導覽列 ── -->
 <nav class="nav">
-  <div class="nav-l">
-    <div class="nt">📦 瓦楞紙箱計算器</div>
-  </div>
-  <button class="tbtn" onclick="toggleTheme()">
+  <div class="nav-title">📦 瓦楞紙箱計算器</div>
+  <button class="theme-btn" onclick="toggleTheme()">
     <span id="tIcon">🌙</span><span id="tLbl">深色</span>
   </button>
 </nav>
 
 <div class="page">
 
-  <!-- 楞型設定 -->
-  <div class="card">
-    <div class="ct"><span class="dot dv"></span>楞型設定</div>
-    <div class="flute-grid" id="fluteGrid">
-      <div class="fc" data-thick="5" data-paper="2" onclick="selFlute(this)">
-        <div class="fc-top"><span class="fc-name">A楞</span><span class="fc-ck">✓</span></div>
-        <div class="fc-thick">5<small style="font-size:11px">mm</small></div>
-        <div class="fc-desc">緩衝佳</div>
-      </div>
-      <div class="fc" data-thick="3" data-paper="1" onclick="selFlute(this)">
-        <div class="fc-top"><span class="fc-name">B楞</span><span class="fc-ck">✓</span></div>
-        <div class="fc-thick">3<small style="font-size:11px">mm</small></div>
-        <div class="fc-desc">強度高</div>
-      </div>
-      <div class="fc sel" data-thick="4" data-paper="2" onclick="selFlute(this)">
-        <div class="fc-top"><span class="fc-name">C楞</span><span class="fc-ck">✓</span></div>
-        <div class="fc-thick">4<small style="font-size:11px">mm</small></div>
-        <div class="fc-desc">通用型</div>
-      </div>
-      <div class="fc" data-thick="1.5" data-paper="0.5" onclick="selFlute(this)">
-        <div class="fc-top"><span class="fc-name">E楞</span><span class="fc-ck">✓</span></div>
-        <div class="fc-thick">1.5<small style="font-size:11px">mm</small></div>
-        <div class="fc-desc">彩盒用</div>
-      </div>
-      <div class="fc" data-thick="7.5" data-paper="2" onclick="selFlute(this)">
-        <div class="fc-top"><span class="fc-name">AB楞</span><span class="fc-ck">✓</span></div>
-        <div class="fc-thick">7.5<small style="font-size:11px">mm</small></div>
-        <div class="fc-desc">重物用</div>
-      </div>
-      <div class="fc" data-thick="" data-paper="" onclick="selFlute(this)" id="customFluteCard">
-        <div class="fc-top"><span class="fc-name">自訂</span><span class="fc-ck">✓</span></div>
-        <div class="fc-thick" style="font-size:13px;padding-top:4px">手動</div>
-        <div class="fc-desc">輸入參數</div>
-      </div>
+<!-- ══════ 楞型設定 ══════ -->
+<div class="sec">
+  <div class="sec-icon" style="background:var(--blue-lt);font-size:15px">🪵</div>
+  <span class="sec-text">楞型設定</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="card hd-blue">
+  <div class="card-hd">
+    <div class="card-hd-icon">🪵</div>
+    <div class="card-hd-title">選擇楞型</div>
+  </div>
+  <div class="fc-grid" id="fluteGrid">
+    <div class="fc" data-thick="5" data-paper="2" onclick="selFlute(this)">
+      <div class="fc-top"><span class="fc-name">A楞</span><span class="fc-check">✓</span></div>
+      <div class="fc-thick">5<small style="font-size:11px">mm</small></div>
+      <div class="fc-desc">緩衝佳</div>
     </div>
-    <div class="fg2" style="margin-top:12px">
-      <div class="fw">
-        <div class="fl">楞高 / 楞型厚度</div>
-        <div class="iw">
-          <input type="number" id="thick" inputmode="decimal" placeholder="4" step="0.5" value="4" oninput="calc()">
-          <span class="utag">mm</span>
-        </div>
-      </div>
-      <div class="fw">
-        <div class="fl">面紙厚度</div>
-        <div class="iw">
-          <input type="number" id="paper" inputmode="decimal" placeholder="2" step="0.5" value="2" oninput="calc()">
-          <span class="utag">mm</span>
-        </div>
-      </div>
+    <div class="fc" data-thick="3" data-paper="1" onclick="selFlute(this)">
+      <div class="fc-top"><span class="fc-name">B楞</span><span class="fc-check">✓</span></div>
+      <div class="fc-thick">3<small style="font-size:11px">mm</small></div>
+      <div class="fc-desc">強度高</div>
+    </div>
+    <div class="fc sel" data-thick="4" data-paper="2" onclick="selFlute(this)">
+      <div class="fc-top"><span class="fc-name">C楞</span><span class="fc-check">✓</span></div>
+      <div class="fc-thick">4<small style="font-size:11px">mm</small></div>
+      <div class="fc-desc">通用型</div>
+    </div>
+    <div class="fc" data-thick="1.5" data-paper="0.5" onclick="selFlute(this)">
+      <div class="fc-top"><span class="fc-name">E楞</span><span class="fc-check">✓</span></div>
+      <div class="fc-thick">1.5<small style="font-size:11px">mm</small></div>
+      <div class="fc-desc">彩盒用</div>
+    </div>
+    <div class="fc" data-thick="7.5" data-paper="2" onclick="selFlute(this)">
+      <div class="fc-top"><span class="fc-name">AB楞</span><span class="fc-check">✓</span></div>
+      <div class="fc-thick">7.5<small style="font-size:11px">mm</small></div>
+      <div class="fc-desc">重物用</div>
+    </div>
+    <div class="fc" id="customFluteCard" data-thick="" data-paper="" onclick="selFlute(this)">
+      <div class="fc-top"><span class="fc-name">自訂</span><span class="fc-check">✓</span></div>
+      <div class="fc-thick" style="font-size:13px;padding-top:3px">手動</div>
+      <div class="fc-desc">輸入↓</div>
     </div>
   </div>
-
-  <!-- 紙質等級 -->
-  <div class="card">
-    <div class="ct"><span class="dot dr2"></span>紙質等級</div>
-    <div class="grade-grid" id="gradeGrid">
-      <div class="gc" data-burst="1380" data-ring="200" data-gsm="200" onclick="selGrade(this)">
-        <div class="gc-top"><span class="gc-name">K-A</span><span class="gc-ck">✓</span></div>
-        <div class="gc-burst">1380<small style="font-size:9px">kPa</small></div>
-        <div class="gc-desc">牛皮紙·高強</div>
-        <span class="gc-tag">優等</span>
-      </div>
-      <div class="gc" data-burst="1200" data-ring="170" data-gsm="180" onclick="selGrade(this)">
-        <div class="gc-top"><span class="gc-name">K-B</span><span class="gc-ck">✓</span></div>
-        <div class="gc-burst">1200<small style="font-size:9px">kPa</small></div>
-        <div class="gc-desc">牛皮紙·標準</div>
-        <span class="gc-tag">一等</span>
-      </div>
-      <div class="gc sel" data-burst="980" data-ring="150" data-gsm="160" onclick="selGrade(this)">
-        <div class="gc-top"><span class="gc-name">C-A</span><span class="gc-ck">✓</span></div>
-        <div class="gc-burst">980<small style="font-size:9px">kPa</small></div>
-        <div class="gc-desc">瓦楞紙·優等</div>
-        <span class="gc-tag">一等</span>
-      </div>
-      <div class="gc" data-burst="780" data-ring="120" data-gsm="140" onclick="selGrade(this)">
-        <div class="gc-top"><span class="gc-name">C-B</span><span class="gc-ck">✓</span></div>
-        <div class="gc-burst">780<small style="font-size:9px">kPa</small></div>
-        <div class="gc-desc">瓦楞紙·標準</div>
-        <span class="gc-tag">二等</span>
-      </div>
-      <div class="gc" data-burst="580" data-ring="90" data-gsm="120" onclick="selGrade(this)">
-        <div class="gc-top"><span class="gc-name">B-A</span><span class="gc-ck">✓</span></div>
-        <div class="gc-burst">580<small style="font-size:9px">kPa</small></div>
-        <div class="gc-desc">再生紙·優等</div>
-        <span class="gc-tag">三等</span>
-      </div>
-      <div class="gc" data-burst="420" data-ring="70" data-gsm="100" onclick="selGrade(this)">
-        <div class="gc-top"><span class="gc-name">W</span><span class="gc-ck">✓</span></div>
-        <div class="gc-burst">420<small style="font-size:9px">kPa</small></div>
-        <div class="gc-desc">廢紙漿·回收</div>
-        <span class="gc-tag">四等</span>
-      </div>
-    </div>
-
-    <!-- 強度結果 -->
-    <div class="strength-grid">
-      <div class="sg-cell sg-burst">
-        <div class="sg-label">破裂強度 Burst</div>
-        <div class="sg-val" id="sBurst">—</div>
-        <div class="sg-unit">kPa（千帕）</div>
-        <div class="sg-grade grade-pass" id="sBurstGrade" style="display:none"></div>
-      </div>
-      <div class="sg-cell sg-comp">
-        <div class="sg-label">耐壓強度 BCT</div>
-        <div class="sg-val" id="sBCT">—</div>
-        <div class="sg-unit">N（牛頓）</div>
-        <div class="sg-grade grade-pass" id="sBCTGrade" style="display:none"></div>
-      </div>
-    </div>
-
-    <!-- 堆疊層數估算 -->
-    <div style="margin-top:10px;background:var(--bg-input);border-radius:var(--r-md);border:1.5px solid var(--border);padding:12px 14px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:12px;font-weight:600;color:var(--txt2)">📦 堆疊承重估算</span>
-        <span style="font-size:11px;color:var(--txt3)">安全係數 × 0.6</span>
-      </div>
-      <div style="display:flex;gap:8px">
-        <div style="flex:1">
-          <div style="font-size:11px;color:var(--txt2);margin-bottom:4px">單箱重量</div>
-          <div class="iw">
-            <input type="number" id="boxWeight" inputmode="decimal" placeholder="10" step="0.5" oninput="calc()">
-            <span class="utag">kg</span>
-          </div>
-        </div>
-        <div style="flex:1">
-          <div style="font-size:11px;color:var(--txt2);margin-bottom:4px">可堆疊層數</div>
-          <div style="background:var(--bg-card);border-radius:var(--r-sm);border:1.5px solid var(--border);padding:12px 13px;font-size:18px;font-weight:700;color:var(--a1);min-height:48px;display:flex;align-items:center" id="sStack">—</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 外箱尺寸 -->
-  <div class="card">
-    <div class="ct"><span class="dot db"></span>外箱尺寸</div>
-    <div class="fg3">
-      <div class="fw">
-        <div class="fl">外長 L</div>
-        <div class="iw"><input type="number" id="L" inputmode="decimal" placeholder="40" oninput="calc()"><span class="utag">cm</span></div>
-      </div>
-      <div class="fw">
-        <div class="fl">外寬 W</div>
-        <div class="iw"><input type="number" id="W" inputmode="decimal" placeholder="30" oninput="calc()"><span class="utag">cm</span></div>
-      </div>
-      <div class="fw">
-        <div class="fl">外高 H</div>
-        <div class="iw"><input type="number" id="H" inputmode="decimal" placeholder="25" oninput="calc()"><span class="utag">cm</span></div>
-      </div>
-    </div>
-    <div class="fw" style="margin-top:10px">
-      <div class="fl">釘接邊（接頭寬度）</div>
+  <div class="thick-inputs">
+    <div class="fw">
+      <div class="fl">楞高 / 楞型厚度</div>
       <div class="iw">
-        <input type="number" id="joint" inputmode="decimal" value="4" oninput="calc()">
-        <span class="utag">cm</span>
+        <input type="number" id="thick" inputmode="decimal" placeholder="4" step="0.5" value="4" oninput="calc()">
+        <span class="utag">mm</span>
       </div>
     </div>
-    <div class="qrow">
-      <span class="ql">快速填入：</span>
-      <button class="qb" onclick="fillSize(20,15,10)">S</button>
-      <button class="qb" onclick="fillSize(30,20,15)">M</button>
-      <button class="qb" onclick="fillSize(40,30,25)">L</button>
-      <button class="qb" onclick="fillSize(50,40,35)">XL</button>
-      <button class="qb" onclick="fillSize(60,50,40)">XXL</button>
+    <div class="fw">
+      <div class="fl">面紙厚度</div>
+      <div class="iw">
+        <input type="number" id="paper" inputmode="decimal" placeholder="2" step="0.5" value="2" oninput="calc()">
+        <span class="utag">mm</span>
+      </div>
     </div>
-  </div>
-
-  <!-- 每平方米單價（完全自訂） -->
-  <div class="card">
-    <div class="ct"><span class="dot do"></span>每平方米單價（NT$）</div>
-    <div class="rate-box">
-      <span class="rate-lbl">NT$</span>
-      <input type="number" id="rate" inputmode="decimal" placeholder="請輸入單價" step="0.5" oninput="calc()">
-      <span class="rate-unit">/ m²</span>
-    </div>
-    <div class="rate-btns">
-      <span class="ql">快填：</span>
-      <button class="rb" onclick="setRate(10)">$10</button>
-      <button class="rb" onclick="setRate(12)">$12</button>
-      <button class="rb" onclick="setRate(15)">$15</button>
-      <button class="rb" onclick="setRate(18)">$18</button>
-      <button class="rb" onclick="setRate(22)">$22</button>
-      <button class="rb" onclick="setRate(25)">$25</button>
-      <button class="rb" onclick="setRate(30)">$30</button>
-      <button class="rb" onclick="setRate(38)">$38</button>
-      <button class="rb" onclick="setRate(45)">$45</button>
-    </div>
-    <div class="rate-hint">⚡ 直接輸入您的實際採購單價，或點選上方快填按鈕</div>
-  </div>
-
-  <!-- 數量 -->
-  <div class="card">
-    <div class="ct"><span class="dot dg"></span>訂購數量</div>
-    <div class="stepper">
-      <button onclick="stepQty(-50)">−</button>
-      <input type="number" id="qty" value="100" inputmode="numeric" oninput="calc()">
-      <button onclick="stepQty(+50)">＋</button>
-    </div>
-    <div class="qp-row">
-      <span class="ql">常用：</span>
-      <button class="qp" onclick="setQty(100)">100</button>
-      <button class="qp" onclick="setQty(500)">500</button>
-      <button class="qp" onclick="setQty(1000)">1,000</button>
-      <button class="qp" onclick="setQty(3000)">3,000</button>
-      <button class="qp" onclick="setQty(5000)">5,000</button>
-    </div>
-  </div>
-
-  <!-- 結果 -->
-  <div class="sdiv"><span>計算結果</span></div>
-
-  <div class="rh" id="resultHero">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div class="rh-lbl">每箱成本 Cost / Box</div>
-      <div class="disc-pill hide" id="discPill">🏷 折扣中</div>
-    </div>
-    <div class="rh-price"><sup>NT$</sup><span id="unitPrice">—</span></div>
-    <div class="rh-grid">
-      <div class="rh-cell"><div class="rh-ck">紙箱面積</div><div class="rh-cv" id="rArea">—</div></div>
-      <div class="rh-cell"><div class="rh-ck">才數</div><div class="rh-cv" id="rCai">—</div></div>
-      <div class="rh-cell"><div class="rh-ck">展開 L × W</div><div class="rh-cv" id="rUnfold">—</div></div>
-      <div class="rh-cell"><div class="rh-ck">總金額 ×<span id="qtyEcho">100</span></div><div class="rh-cv" id="rTotal">—</div></div>
-    </div>
-  </div>
-
-  <!-- 尺寸明細 -->
-  <div class="dc">
-    <div class="ct" style="margin-bottom:8px"><span class="dot db"></span>尺寸換算明細</div>
-    <div class="dr"><span class="dk">📏 內尺寸 L×W×H</span><span class="dv" id="dInner">—</span></div>
-    <div class="dr"><span class="dk">📐 製造尺寸 L×W×H</span><span class="dv" id="dMfg">—</span></div>
-    <div class="dr"><span class="dk">📦 外尺寸 L×W×H</span><span class="dv" id="dOuter">—</span></div>
-    <div class="dr"><span class="dk">📋 展開長 × 展開寬</span><span class="dv" id="dUnfoldDim">—</span></div>
-    <div class="dr"><span class="dk">💰 採用單價</span><span class="dv" id="dRate">未輸入</span></div>
-    <div class="dr"><span class="dk">⚙️ 損耗係數</span><span class="dv">3%</span></div>
-    <div class="dr"><span class="dk">🎁 數量折扣</span><span class="dv" id="dDisc">無折扣</span></div>
-    <div class="dr"><span class="dk">🧪 紙質等級</span><span class="dv" id="dGrade">C-A</span></div>
-    <div class="dr"><span class="dk">💥 破裂強度</span><span class="dv" id="dBurst">—</span></div>
-    <div class="dr"><span class="dk">🏗 耐壓強度 BCT</span><span class="dv" id="dBCT">—</span></div>
-  </div>
-
-  <!-- 公式說明 -->
-  <div class="sdiv"><span>計算公式說明</span></div>
-
-  <div class="card" style="margin-top:0">
-    <div class="ct"><span class="dot db"></span>尺寸換算公式</div>
-    <div class="fb">
-      <div class="ft">內尺寸（cm）</div>
-      <div class="fl2">內長/寬 = 外長/寬 − <span class="hl">面紙厚(cm) − 楞高(cm)</span></div>
-      <div class="fl2">內高 = 外高 − <span class="hl">2 × (面紙厚 + 楞高)</span></div>
-    </div>
-    <div class="fb">
-      <div class="ft">才數計算（cm²÷918）</div>
-      <div class="fl2">展開長 = <span class="hl">(外L + 外W) × 2 + 釘接邊</span></div>
-      <div class="fl2">展開寬 = <span class="hl">(外W + 外H) × 2</span>（含上下蓋板）</div>
-      <div class="fl2">才數 = 展開長 × 展開寬 ÷ <span class="hl">918</span></div>
-    </div>
-    <div class="fb">
-      <div class="ft">面積與成本</div>
-      <div class="fl2">面積(m²) = <span class="hl">[(L+W)×2 + 釘接邊] cm ÷100 × [(W+H)×2] cm ÷100</span></div>
-      <div class="fl2">含損耗面積 = 面積 × <span class="hl">1.03</span>（3% 損耗）</div>
-      <div class="fl2">每箱成本 = 含損耗面積 × <span class="hl">單價</span> × 折扣係數</div>
-    </div>
-  </div>
-
-  <!-- 強度公式 -->
-  <div class="card" style="margin-top:0">
-    <div class="ct"><span class="dot dr2"></span>強度計算公式</div>
-    <div class="fb">
-      <div class="ft">破裂強度（Bursting Strength）</div>
-      <div class="fl2">破裂強度 = <span class="hl">面紙破裂強度（kPa）× 層數係數</span></div>
-      <div class="fl2">三層係數 <span class="hl">× 1.0</span>，五層係數 <span class="hl">× 1.8</span>，七層 <span class="hl">× 2.5</span></div>
-      <div class="fl2">標準：一般貨物 ≥ 600 kPa；重物 ≥ 1000 kPa</div>
-    </div>
-    <div class="fb">
-      <div class="ft">耐壓強度 BCT（Box Compression Test）</div>
-      <div class="fl2">BCT = <span class="hl">5.87 × ECT × Z^0.5 × A^0.25</span>（McKee 簡化公式）</div>
-      <div class="fl2">ECT = 邊壓強度（kN/m）= Ring × 楞型係數 × 2</div>
-      <div class="fl2">Z = 箱體周長（cm），A = 箱體底面積（cm²）</div>
-    </div>
-    <div class="fb">
-      <div class="ft">堆疊層數估算</div>
-      <div class="fl2">可承重 = BCT × <span class="hl">0.60</span>（安全係數 60%）</div>
-      <div class="fl2">堆疊層數 = 可承重 ÷ <span class="hl">（單箱重量 × 9.81）</span></div>
-    </div>
-  </div>
-
-  <!-- 紙質等級表 -->
-  <div class="card">
-    <div class="ct"><span class="dot dr2"></span>紙質等級對照表</div>
-    <table class="st">
-      <thead><tr><th>等級</th><th>紙質</th><th>破裂強度</th><th>環壓強度</th><th>適用場合</th></tr></thead>
-      <tbody>
-        <tr><td><span class="badge" style="background:rgba(255,45,85,.1);color:var(--a5)">K-A</span></td><td>牛皮紙·優</td><td>≥1380 kPa</td><td>200 kN/m</td><td>出口重貨</td></tr>
-        <tr><td><span class="badge" style="background:rgba(255,45,85,.1);color:var(--a5)">K-B</span></td><td>牛皮紙·標</td><td>≥1200 kPa</td><td>170 kN/m</td><td>工業重物</td></tr>
-        <tr><td><span class="badge" style="background:rgba(0,122,255,.1);color:var(--a1)">C-A</span></td><td>瓦楞紙·優</td><td>≥980 kPa</td><td>150 kN/m</td><td>一般電商</td></tr>
-        <tr><td><span class="badge" style="background:rgba(0,122,255,.1);color:var(--a1)">C-B</span></td><td>瓦楞紙·標</td><td>≥780 kPa</td><td>120 kN/m</td><td>零售包裝</td></tr>
-        <tr><td><span class="badge" style="background:rgba(52,199,89,.1);color:var(--a4)">B-A</span></td><td>再生紙·優</td><td>≥580 kPa</td><td>90 kN/m</td><td>輕物內箱</td></tr>
-        <tr><td><span class="badge" style="background:rgba(174,174,178,.15);color:var(--txt2)">W</span></td><td>廢紙漿回收</td><td>≥420 kPa</td><td>70 kN/m</td><td>低成本用</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 楞型表 -->
-  <div class="card">
-    <div class="ct"><span class="dot dv"></span>楞型規格對照</div>
-    <table class="st">
-      <thead><tr><th>楞型</th><th>楞高</th><th>面紙厚</th><th>特性</th></tr></thead>
-      <tbody>
-        <tr><td>A楞</td><td>5 mm</td><td>2 mm</td><td>緩衝佳，五層</td></tr>
-        <tr><td>B楞</td><td>3 mm</td><td>1 mm</td><td>強度高，三層</td></tr>
-        <tr><td>C楞</td><td>4 mm</td><td>2 mm</td><td>通用型，五層</td></tr>
-        <tr><td>E楞</td><td>1.5 mm</td><td>0.5 mm</td><td>彩盒用，三層</td></tr>
-        <tr><td>AB楞</td><td>7.5 mm</td><td>2 mm</td><td>重型，五層</td></tr>
-        <tr><td>F/G楞</td><td>&lt;1 mm</td><td>0.2 mm</td><td>精細印刷</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 折扣表 -->
-  <div class="card">
-    <div class="ct"><span class="dot dg"></span>數量折扣方案</div>
-    <table class="st">
-      <thead><tr><th>訂購量</th><th>折扣</th><th>係數</th></tr></thead>
-      <tbody>
-        <tr><td>&lt; 500 件</td><td><span class="badge br">無折扣</span></td><td>× 1.00</td></tr>
-        <tr><td>500–999 件</td><td><span class="badge bo">8% OFF</span></td><td>× 0.92</td></tr>
-        <tr><td>1,000–2,999 件</td><td><span class="badge bg">15% OFF</span></td><td>× 0.85</td></tr>
-        <tr><td>≥ 3,000 件</td><td><span class="badge bb">20% OFF</span></td><td>× 0.80</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="footer">
-    © 2026 Packaging Tech · 計算結果供參考，實際報價請洽業務<br>
-    公式參考：<a href="https://lanone100.github.io/cartontools/" style="color:var(--a1)" target="_blank">lanone100 瓦楞紙箱計算器</a>
   </div>
 </div>
 
+<!-- ══════ 紙質等級 ══════ -->
+<div class="sec">
+  <div class="sec-icon" style="background:var(--pink-lt);font-size:15px">🧻</div>
+  <span class="sec-text">紙質等級</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="card hd-red">
+  <div class="card-hd">
+    <div class="card-hd-icon">🧻</div>
+    <div class="card-hd-title">選擇紙質等級</div>
+  </div>
+  <div class="gc-grid" id="gradeGrid">
+    <div class="gc" data-burst="1380" data-ring="200" data-gsm="200" onclick="selGrade(this)">
+      <div class="gc-top"><span class="gc-name">K-A</span><span class="gc-ck">✓</span></div>
+      <div class="gc-kpa">1380<small style="font-size:8px">kPa</small></div>
+      <div class="gc-desc">牛皮·高強</div>
+      <span class="gc-tag">優等</span>
+    </div>
+    <div class="gc" data-burst="1200" data-ring="170" data-gsm="180" onclick="selGrade(this)">
+      <div class="gc-top"><span class="gc-name">K-B</span><span class="gc-ck">✓</span></div>
+      <div class="gc-kpa">1200<small style="font-size:8px">kPa</small></div>
+      <div class="gc-desc">牛皮·標準</div>
+      <span class="gc-tag">一等</span>
+    </div>
+    <div class="gc sel" data-burst="980" data-ring="150" data-gsm="160" onclick="selGrade(this)">
+      <div class="gc-top"><span class="gc-name">C-A</span><span class="gc-ck">✓</span></div>
+      <div class="gc-kpa">980<small style="font-size:8px">kPa</small></div>
+      <div class="gc-desc">瓦楞·優等</div>
+      <span class="gc-tag">一等</span>
+    </div>
+    <div class="gc" data-burst="780" data-ring="120" data-gsm="140" onclick="selGrade(this)">
+      <div class="gc-top"><span class="gc-name">C-B</span><span class="gc-ck">✓</span></div>
+      <div class="gc-kpa">780<small style="font-size:8px">kPa</small></div>
+      <div class="gc-desc">瓦楞·標準</div>
+      <span class="gc-tag">二等</span>
+    </div>
+    <div class="gc" data-burst="580" data-ring="90" data-gsm="120" onclick="selGrade(this)">
+      <div class="gc-top"><span class="gc-name">B-A</span><span class="gc-ck">✓</span></div>
+      <div class="gc-kpa">580<small style="font-size:8px">kPa</small></div>
+      <div class="gc-desc">再生·優等</div>
+      <span class="gc-tag">三等</span>
+    </div>
+    <div class="gc" data-burst="420" data-ring="70" data-gsm="100" onclick="selGrade(this)">
+      <div class="gc-top"><span class="gc-name">W</span><span class="gc-ck">✓</span></div>
+      <div class="gc-kpa">420<small style="font-size:8px">kPa</small></div>
+      <div class="gc-desc">廢紙·回收</div>
+      <span class="gc-tag">四等</span>
+    </div>
+  </div>
+
+  <!-- 強度雙格 -->
+  <div class="strength-row">
+    <div class="sg sg-burst">
+      <div class="sg-lbl">破裂強度 Burst</div>
+      <div class="sg-num" id="sBurst">—</div>
+      <div class="sg-unit">kPa（千帕）</div>
+      <div class="sg-badge grade-p" id="sBurstGrade" style="display:none"></div>
+    </div>
+    <div class="sg sg-comp">
+      <div class="sg-lbl">耐壓強度 BCT</div>
+      <div class="sg-num" id="sBCT">—</div>
+      <div class="sg-unit">N（牛頓）</div>
+      <div class="sg-badge grade-p" id="sBCTGrade" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- 堆疊估算 -->
+  <div class="stack-row">
+    <div class="stack-input">
+      <div class="fl" style="margin-bottom:5px">📦 單箱重量</div>
+      <div class="iw">
+        <input type="number" id="boxWeight" inputmode="decimal" placeholder="10" step="0.5" oninput="calc()">
+        <span class="utag">kg</span>
+      </div>
+    </div>
+    <div style="flex:1">
+      <div class="fl" style="margin-bottom:5px">可堆疊層數</div>
+      <div class="stack-result" id="sStack">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ 外箱尺寸 ══════ -->
+<div class="sec">
+  <div class="sec-icon" style="background:var(--teal-lt);font-size:15px">📐</div>
+  <span class="sec-text">外箱尺寸</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="card hd-teal">
+  <div class="card-hd">
+    <div class="card-hd-icon">📐</div>
+    <div class="card-hd-title">外箱尺寸（cm）</div>
+  </div>
+  <div class="fg3">
+    <div class="fw">
+      <div class="fl">外長 L</div>
+      <div class="iw"><input type="number" id="L" inputmode="decimal" placeholder="40" oninput="calc()"><span class="utag">cm</span></div>
+    </div>
+    <div class="fw">
+      <div class="fl">外寬 W</div>
+      <div class="iw"><input type="number" id="W" inputmode="decimal" placeholder="30" oninput="calc()"><span class="utag">cm</span></div>
+    </div>
+    <div class="fw">
+      <div class="fl">外高 H</div>
+      <div class="iw"><input type="number" id="H" inputmode="decimal" placeholder="25" oninput="calc()"><span class="utag">cm</span></div>
+    </div>
+  </div>
+  <div class="fw" style="margin-top:10px">
+    <div class="fl">釘接邊（接頭寬度）</div>
+    <div class="iw">
+      <input type="number" id="joint" inputmode="decimal" value="4" oninput="calc()">
+      <span class="utag">cm</span>
+    </div>
+  </div>
+  <div class="chip-row">
+    <span class="chip-lbl">快速填入：</span>
+    <button class="chip" onclick="fillSize(20,15,10)">S</button>
+    <button class="chip" onclick="fillSize(30,20,15)">M</button>
+    <button class="chip" onclick="fillSize(40,30,25)">L</button>
+    <button class="chip" onclick="fillSize(50,40,35)">XL</button>
+    <button class="chip" onclick="fillSize(60,50,40)">XXL</button>
+  </div>
+</div>
+
+<!-- ══════ 材料單價 ══════ -->
+<div class="sec">
+  <div class="sec-icon" style="background:var(--orange-lt);font-size:15px">💰</div>
+  <span class="sec-text">每平方米單價</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="card hd-orange">
+  <div class="card-hd">
+    <div class="card-hd-icon">💰</div>
+    <div class="card-hd-title">材料單價（NT$ / m²）</div>
+  </div>
+  <div class="rate-wrap">
+    <span class="rate-prefix">NT$</span>
+    <input type="number" id="rate" inputmode="decimal" placeholder="請輸入單價" step="0.5" oninput="calc()">
+    <span class="rate-suf">/ m²</span>
+  </div>
+  <div class="rate-chips">
+    <span class="chip-lbl">快填：</span>
+    <button class="rc" onclick="setRate(10)">$10</button>
+    <button class="rc" onclick="setRate(12)">$12</button>
+    <button class="rc" onclick="setRate(15)">$15</button>
+    <button class="rc" onclick="setRate(18)">$18</button>
+    <button class="rc" onclick="setRate(22)">$22</button>
+    <button class="rc" onclick="setRate(25)">$25</button>
+    <button class="rc" onclick="setRate(30)">$30</button>
+    <button class="rc" onclick="setRate(38)">$38</button>
+    <button class="rc" onclick="setRate(45)">$45</button>
+  </div>
+  <div class="rate-note">⚡ 直接輸入實際採購單價，或點選快填按鈕</div>
+</div>
+
+<!-- ══════ 訂購數量 ══════ -->
+<div class="sec">
+  <div class="sec-icon" style="background:var(--green-lt);font-size:15px">📦</div>
+  <span class="sec-text">訂購數量</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="card hd-green">
+  <div class="card-hd">
+    <div class="card-hd-icon">📦</div>
+    <div class="card-hd-title">訂購數量（件）</div>
+  </div>
+  <div class="stepper">
+    <button onclick="stepQty(-50)">−</button>
+    <input type="number" id="qty" value="100" inputmode="numeric" oninput="calc()">
+    <button onclick="stepQty(+50)">＋</button>
+  </div>
+  <div class="qty-chips">
+    <span class="chip-lbl">常用：</span>
+    <button class="qp" onclick="setQty(100)">100</button>
+    <button class="qp" onclick="setQty(500)">500</button>
+    <button class="qp" onclick="setQty(1000)">1,000</button>
+    <button class="qp" onclick="setQty(3000)">3,000</button>
+    <button class="qp" onclick="setQty(5000)">5,000</button>
+  </div>
+</div>
+
+<!-- ══════ 計算結果 ══════ -->
+<div class="sec">
+  <div class="sec-icon" style="background:var(--red-lt);font-size:15px">💸</div>
+  <span class="sec-text">計算結果</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="result-card" id="resultHero">
+  <div class="rc-top">
+    <div class="rc-lbl">每箱成本 Cost / Box</div>
+    <div class="disc-pill hide" id="discPill">🏷 折扣中</div>
+  </div>
+  <div class="rc-price"><sup>NT$</sup><span id="unitPrice">—</span></div>
+  <div class="rc-grid">
+    <div class="rc-cell"><div class="rc-ck">紙箱面積</div><div class="rc-cv" id="rArea">—</div></div>
+    <div class="rc-cell"><div class="rc-ck">才數</div><div class="rc-cv" id="rCai">—</div></div>
+    <div class="rc-cell"><div class="rc-ck">展開 L × W</div><div class="rc-cv" id="rUnfold">—</div></div>
+    <div class="rc-cell"><div class="rc-ck">總金額 ×<span id="qtyEcho">100</span></div><div class="rc-cv" id="rTotal">—</div></div>
+  </div>
+</div>
+
+<!-- 尺寸換算明細 -->
+<div class="detail">
+  <div class="detail-hd">📋 尺寸換算明細</div>
+  <div class="dr"><span class="dk">📏 內尺寸 L×W×H</span><span class="dv" id="dInner">—</span></div>
+  <div class="dr"><span class="dk">📐 製造尺寸 L×W×H</span><span class="dv" id="dMfg">—</span></div>
+  <div class="dr"><span class="dk">📦 外尺寸 L×W×H</span><span class="dv" id="dOuter">—</span></div>
+  <div class="dr"><span class="dk">📋 展開長 × 展開寬</span><span class="dv" id="dUnfoldDim">—</span></div>
+  <div class="dr"><span class="dk">💰 採用單價</span><span class="dv" id="dRate">未輸入</span></div>
+  <div class="dr"><span class="dk">⚙️ 損耗係數</span><span class="dv">3%</span></div>
+  <div class="dr"><span class="dk">🎁 數量折扣</span><span class="dv" id="dDisc">無折扣</span></div>
+  <div class="dr"><span class="dk">🧪 紙質等級</span><span class="dv" id="dGrade">C-A</span></div>
+  <div class="dr"><span class="dk">💥 破裂強度</span><span class="dv" id="dBurst">—</span></div>
+  <div class="dr"><span class="dk">🏗 耐壓強度 BCT</span><span class="dv" id="dBCT">—</span></div>
+</div>
+
+<!-- ══════ 公式說明 ══════ -->
+<div class="sec">
+  <div class="sec-icon" style="background:var(--blue-lt);font-size:15px">🧮</div>
+  <span class="sec-text">計算公式說明</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="card">
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--teal-lt)">📐</div><div class="card-hd-title">尺寸換算公式</div></div>
+  <div class="fb">
+    <div class="ft">內尺寸（cm）</div>
+    <div class="fl2">內長/寬 = 外長/寬 − <span class="hl">面紙厚 − 楞高</span></div>
+    <div class="fl2">內高 = 外高 − <span class="hl">2 × (面紙厚 + 楞高)</span></div>
+  </div>
+  <div class="fb">
+    <div class="ft">才數計算（cm² ÷ 918）</div>
+    <div class="fl2">展開長 = <span class="hl">(外L + 外W) × 2 + 釘接邊</span></div>
+    <div class="fl2">展開寬 = <span class="hl">(外W + 外H) × 2</span>（含上下蓋板）</div>
+    <div class="fl2">才數 = 展開長 × 展開寬 ÷ <span class="hl">918</span></div>
+  </div>
+  <div class="fb">
+    <div class="ft">面積與成本</div>
+    <div class="fl2">面積(m²) = <span class="hl">[(L+W)×2+釘接邊] ÷100 × (W+H)×2 ÷100</span></div>
+    <div class="fl2">含損耗 = 面積 × <span class="hl">1.03</span>（3% 損耗）</div>
+    <div class="fl2">每箱成本 = 含損耗 × <span class="hl">單價</span> × 折扣係數</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--red-lt)">💥</div><div class="card-hd-title">強度計算公式</div></div>
+  <div class="fb">
+    <div class="ft">破裂強度（Bursting Strength）</div>
+    <div class="fl2">破裂強度 = <span class="hl">面紙破裂強度 × 層數係數</span></div>
+    <div class="fl2">三層 ×1.0 ／ 五層 <span class="hl">×1.8</span> ／ 七層 <span class="hl">×2.5</span></div>
+  </div>
+  <div class="fb">
+    <div class="ft">耐壓強度 BCT（McKee 公式）</div>
+    <div class="fl2">BCT = <span class="hl">5.87 × ECT × Z⁰·⁵ × A⁰·²⁵</span></div>
+    <div class="fl2">Z = 周長(cm)，A = 底面積(cm²)</div>
+  </div>
+  <div class="fb">
+    <div class="ft">堆疊層數</div>
+    <div class="fl2">安全承重 = BCT × <span class="hl">0.60</span>（安全係數）</div>
+    <div class="fl2">層數 = 安全承重 ÷ <span class="hl">(重量 × 9.81)</span></div>
+  </div>
+</div>
+
+<!-- ══════ 規格表 ══════ -->
+<div class="sec">
+  <div class="sec-icon" style="background:var(--purple-lt);font-size:15px">📊</div>
+  <span class="sec-text">規格對照表</span>
+  <div class="sec-line"></div>
+</div>
+
+<div class="card">
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--pink-lt)">🧻</div><div class="card-hd-title">紙質等級對照</div></div>
+  <table class="st">
+    <thead><tr><th>等級</th><th>紙質</th><th>破裂強度</th><th>環壓強度</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge">K-A</span></td><td>牛皮紙·優</td><td>≥1380 kPa</td><td>200</td><td>出口重貨</td></tr>
+      <tr><td><span class="badge">K-B</span></td><td>牛皮紙·標</td><td>≥1200 kPa</td><td>170</td><td>工業重物</td></tr>
+      <tr><td><span class="badge">C-A</span></td><td>瓦楞紙·優</td><td>≥980 kPa</td><td>150</td><td>一般電商</td></tr>
+      <tr><td><span class="badge">C-B</span></td><td>瓦楞紙·標</td><td>≥780 kPa</td><td>120</td><td>零售包裝</td></tr>
+      <tr><td><span class="badge">B-A</span></td><td>再生紙·優</td><td>≥580 kPa</td><td>90</td><td>輕物內箱</td></tr>
+      <tr><td><span class="badge">W</span></td><td>廢紙漿</td><td>≥420 kPa</td><td>70</td><td>低成本</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--blue-lt)">🪵</div><div class="card-hd-title">楞型規格對照</div></div>
+  <table class="st">
+    <thead><tr><th>楞型</th><th>楞高</th><th>面紙厚</th><th>特性</th></tr></thead>
+    <tbody>
+      <tr><td>A楞</td><td>5 mm</td><td>2 mm</td><td>緩衝佳·五層</td></tr>
+      <tr><td>B楞</td><td>3 mm</td><td>1 mm</td><td>強度高·三層</td></tr>
+      <tr><td>C楞</td><td>4 mm</td><td>2 mm</td><td>通用型·五層</td></tr>
+      <tr><td>E楞</td><td>1.5 mm</td><td>0.5 mm</td><td>彩盒用·三層</td></tr>
+      <tr><td>AB楞</td><td>7.5 mm</td><td>2 mm</td><td>重型·五層</td></tr>
+      <tr><td>F/G楞</td><td>&lt;1 mm</td><td>0.2 mm</td><td>精細印刷</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-hd"><div class="card-hd-icon" style="background:var(--green-lt)">🎁</div><div class="card-hd-title">數量折扣方案</div></div>
+  <table class="st">
+    <thead><tr><th>訂購量</th><th>折扣</th><th>係數</th></tr></thead>
+    <tbody>
+      <tr><td>&lt; 500 件</td><td>無折扣</td><td>× 1.00</td></tr>
+      <tr><td>500–999 件</td><td>8% OFF</td><td>× 0.92</td></tr>
+      <tr><td>1,000–2,999 件</td><td>15% OFF</td><td>× 0.85</td></tr>
+      <tr><td>≥ 3,000 件</td><td>20% OFF</td><td>× 0.80</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer">
+  © 2026 Packaging Tech · 計算結果供參考，實際報價請洽業務<br>
+  公式參考：<a href="https://lanone100.github.io/cartontools/" style="color:var(--blue)" target="_blank">lanone100 瓦楞紙箱計算器</a>
+</div>
+
+</div><!-- /page -->
+
 <script>
+let gradeData={burst:980,ring:150,gsm:160,name:'C-A'};
+
 function toggleTheme(){
   const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';
   h.setAttribute('data-theme',d?'light':'dark');
   document.getElementById('tIcon').textContent=d?'🌙':'☀️';
   document.getElementById('tLbl').textContent=d?'深色':'淺色';
 }
-
-// 楞型狀態
-let gradeData={burst:980,ring:150,gsm:160,name:'C-A'};
 
 function selGrade(el){
   document.querySelectorAll('.gc').forEach(c=>c.classList.remove('sel'));
@@ -575,54 +972,42 @@ function selFlute(el){
   calc();
 }
 
-function setRate(v){
-  document.getElementById('rate').value=v;
-  popAnim('resultHero');calc();
-}
-
+function setRate(v){document.getElementById('rate').value=v;pop('resultHero');calc()}
 function fillSize(l,w,h){
   document.getElementById('L').value=l;
   document.getElementById('W').value=w;
   document.getElementById('H').value=h;
-  popAnim('resultHero');calc();
+  pop('resultHero');calc();
 }
-
 function stepQty(d){
   const el=document.getElementById('qty');
   el.value=Math.max(1,(parseInt(el.value)||100)+d);
   updQP(parseInt(el.value));calc();
 }
-
-function setQty(v){
-  document.getElementById('qty').value=v;
-  updQP(v);calc();
-}
-
+function setQty(v){document.getElementById('qty').value=v;updQP(v);calc()}
 function updQP(v){
   document.querySelectorAll('.qp').forEach(b=>
     b.classList.toggle('on',parseInt(b.textContent.replace(/,/g,''))===v));
 }
-
-function popAnim(id){
+function pop(id){
   const el=document.getElementById(id);
   el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');
 }
-
 function f1(n){return isNaN(n)||!isFinite(n)?'—':n.toFixed(1)}
 function f2(n){return isNaN(n)||!isFinite(n)?'—':n.toFixed(2)}
 function f4(n){return isNaN(n)||!isFinite(n)?'—':n.toFixed(4)}
 
-function burstGradeLabel(b){
-  if(b>=1200) return{txt:'重型出口',cls:'grade-pass'};
-  if(b>=900)  return{txt:'標準電商',cls:'grade-pass'};
-  if(b>=600)  return{txt:'一般貨物',cls:'grade-warn'};
-  return{txt:'輕物建議',cls:'grade-fail'};
+function burstLbl(b){
+  if(b>=1200)return{t:'重型出口',c:'grade-p'};
+  if(b>=900) return{t:'標準電商',c:'grade-p'};
+  if(b>=600) return{t:'一般貨物',c:'grade-w'};
+  return{t:'輕物建議',c:'grade-f'};
 }
-function bctGradeLabel(b){
-  if(b>=3000) return{txt:'重型合格',cls:'grade-pass'};
-  if(b>=1500) return{txt:'標準合格',cls:'grade-pass'};
-  if(b>=800)  return{txt:'輕貨適用',cls:'grade-warn'};
-  return{txt:'強度偏低',cls:'grade-fail'};
+function bctLbl(b){
+  if(b>=3000)return{t:'重型合格',c:'grade-p'};
+  if(b>=1500)return{t:'標準合格',c:'grade-p'};
+  if(b>=800) return{t:'輕貨適用',c:'grade-w'};
+  return{t:'強度偏低',c:'grade-f'};
 }
 
 function calc(){
@@ -632,25 +1017,18 @@ function calc(){
   const joint=parseFloat(document.getElementById('joint').value)||4;
   const thick=parseFloat(document.getElementById('thick').value)||0;
   const paper=parseFloat(document.getElementById('paper').value)||0;
-  const rateStr=document.getElementById('rate').value;
-  const rate=rateStr!==''&&!isNaN(parseFloat(rateStr))?parseFloat(rateStr):NaN;
+  const rStr=document.getElementById('rate').value;
+  const rate=rStr!==''&&!isNaN(parseFloat(rStr))?parseFloat(rStr):NaN;
   const qty=parseInt(document.getElementById('qty').value)||1;
   const boxWt=parseFloat(document.getElementById('boxWeight').value)||0;
 
-  // mm → cm
-  const tc=thick/10, pc=paper/10;
-  const iL=L-pc-tc, iW=W-pc-tc, iH=H-2*(pc+tc);
-  const mL=iL+tc, mW=iW+tc, mH=iH+2*tc;
-
-  // 才數
-  const unfL=(L+W)*2+joint;
-  const unfW=(W+H)*2;
+  const tc=thick/10,pc=paper/10;
+  const iL=L-pc-tc,iW=W-pc-tc,iH=H-2*(pc+tc);
+  const mL=iL+tc,mW=iW+tc,mH=iH+2*tc;
+  const unfL=(L+W)*2+joint,unfW=(W+H)*2;
   const cai=unfL*unfW/918;
-
-  // 面積 m²
   const area=((L+W)*2+joint)/100*((W+H)*2)/100;
 
-  // 折扣
   let df=1.0,discText='無折扣',pill='';
   if(qty>=3000){df=0.80;discText='20% OFF (≥3000件)';pill='🏷 20% OFF';}
   else if(qty>=1000){df=0.85;discText='15% OFF (≥1000件)';pill='🏷 15% OFF';}
@@ -660,37 +1038,16 @@ function calc(){
   const unit=hasRate?area*rate*1.03*df:NaN;
   const total=hasRate?unit*qty:NaN;
 
-  // ── 強度計算 ──
-  // 層數係數（根據楞型厚度判斷）
-  let layerK=1.0;
-  if(thick>=9) layerK=2.5;       // 七層
-  else if(thick>=4) layerK=1.8;  // 五層
-  else layerK=1.0;               // 三層
-
-  // 破裂強度 kPa
+  let layerK=thick>=9?2.5:thick>=4?1.8:1.0;
   const burst=gradeData.burst*layerK;
-
-  // BCT 耐壓強度（McKee 簡化公式）
-  // ECT = Ring × layerK × 2（kN/m → N/cm = ×100/100=×1）
-  // BCT = 5.87 × ECT × Z^0.5 × A^0.25
-  // Z=箱體周長cm，A=底面積cm²
   let bct=NaN;
   if(L>0&&W>0&&H>0){
-    const ECT=gradeData.ring*layerK*0.002; // kN/m → N/cm
-    const Z=(L+W)*2;                        // 周長 cm
-    const A=L*W;                            // 底面積 cm²
-    bct=5.87*ECT*Math.pow(Z,0.5)*Math.pow(A,0.25);
+    const ECT=gradeData.ring*layerK*0.002;
+    bct=5.87*ECT*Math.pow((L+W)*2,.5)*Math.pow(L*W,.25);
   }
+  const stack=(!isNaN(bct)&&bct>0&&boxWt>0)?Math.floor(bct*0.6/(boxWt*9.81))+'層':'—';
 
-  // 堆疊層數
-  let stackLayers='—';
-  if(!isNaN(bct)&&bct>0&&boxWt>0){
-    const safeLoad=bct*0.60;  // N，安全60%
-    const boxForce=boxWt*9.81; // N
-    stackLayers=Math.floor(safeLoad/boxForce)+'層';
-  }
-
-  // ── 更新 UI ──
+  // 結果區
   document.getElementById('unitPrice').textContent=hasRate?unit.toFixed(2):'—';
   document.getElementById('rArea').textContent=area>0?f4(area)+' m²':'—';
   document.getElementById('rCai').textContent=cai>0?f2(cai)+' 才':'—';
@@ -698,37 +1055,31 @@ function calc(){
   document.getElementById('qtyEcho').textContent=qty.toLocaleString();
   document.getElementById('rTotal').textContent=hasRate?'NT$'+Math.round(total).toLocaleString('zh-TW'):'—';
 
-  document.getElementById('dInner').textContent=(iL>0)?f1(iL)+'×'+f1(iW)+'×'+f1(iH)+' cm':'—';
-  document.getElementById('dMfg').textContent=(mL>0)?f1(mL)+'×'+f1(mW)+'×'+f1(mH)+' cm':'—';
-  document.getElementById('dOuter').textContent=(L>0)?f1(L)+'×'+f1(W)+'×'+f1(H)+' cm':'—';
-  document.getElementById('dUnfoldDim').textContent=(unfL>0)?f1(unfL)+'×'+f1(unfW)+' cm':'—';
+  // 明細
+  document.getElementById('dInner').textContent=iL>0?f1(iL)+'×'+f1(iW)+'×'+f1(iH)+' cm':'—';
+  document.getElementById('dMfg').textContent=mL>0?f1(mL)+'×'+f1(mW)+'×'+f1(mH)+' cm':'—';
+  document.getElementById('dOuter').textContent=L>0?f1(L)+'×'+f1(W)+'×'+f1(H)+' cm':'—';
+  document.getElementById('dUnfoldDim').textContent=unfL>0?f1(unfL)+'×'+f1(unfW)+' cm':'—';
   document.getElementById('dRate').textContent=hasRate?'NT$ '+rate.toFixed(2)+' / m²':'未輸入';
   document.getElementById('dDisc').textContent=discText;
   document.getElementById('dGrade').textContent=gradeData.name;
   document.getElementById('dBurst').textContent=Math.round(burst)+' kPa';
   document.getElementById('dBCT').textContent=!isNaN(bct)?Math.round(bct)+' N':'需輸入尺寸';
 
-  // 強度卡更新
+  // 強度卡
   document.getElementById('sBurst').textContent=Math.round(burst);
   document.getElementById('sBCT').textContent=!isNaN(bct)?Math.round(bct):'—';
-  document.getElementById('sStack').textContent=stackLayers;
-
-  // 破裂強度等級標籤
-  const bg=burstGradeLabel(burst);
-  const bgEl=document.getElementById('sBurstGrade');
-  bgEl.textContent=bg.txt; bgEl.className='sg-grade '+bg.cls; bgEl.style.display='inline-block';
-
-  // BCT 等級標籤
+  document.getElementById('sStack').textContent=stack;
+  const bl=burstLbl(burst),be=document.getElementById('sBurstGrade');
+  be.textContent=bl.t;be.className='sg-badge '+bl.c;be.style.display='inline-block';
   if(!isNaN(bct)){
-    const bcg=bctGradeLabel(bct);
-    const bcEl=document.getElementById('sBCTGrade');
-    bcEl.textContent=bcg.txt; bcEl.className='sg-grade '+bcg.cls; bcEl.style.display='inline-block';
+    const bc=bctLbl(bct),bce=document.getElementById('sBCTGrade');
+    bce.textContent=bc.t;bce.className='sg-badge '+bc.c;bce.style.display='inline-block';
   }
 
   const p=document.getElementById('discPill');
   if(pill){p.textContent=pill;p.classList.remove('hide');}else{p.classList.add('hide');}
-
-  if(L>0&&W>0&&H>0) popAnim('resultHero');
+  if(L>0&&W>0&&H>0) pop('resultHero');
 }
 
 calc();
