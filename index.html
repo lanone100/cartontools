@@ -2,7 +2,7 @@
 <html lang="zh-TW" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>瓦楞紙箱計算器</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -74,7 +74,7 @@
   --grad-qty:    linear-gradient(135deg,#30D158 0%,#5AC8FA 100%);
   --grad-green:  linear-gradient(135deg,#30D158,#25AA47);
 
-  --txt:#F5F5F7; --txt2:#AEAEB2; --txt3:#48484A;
+  --txt:#F5F5F7; --txt2:#AEAEB2; --txt3:#6E6E73;
   --border:rgba(255,255,255,0.10);
   --sh-xs:0 1px 4px rgba(0,0,0,0.2);
   --sh-sm:0 2px 12px rgba(0,0,0,0.3);
@@ -89,6 +89,8 @@ body{
   font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;
   min-height:100vh;transition:background .35s,color .35s;
   -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  word-break:break-word;
 }
 
 /* ═══════════════════════════════ NAV ═══════════════════════════════ */
@@ -129,7 +131,12 @@ body{
 .theme-btn:hover{background:rgba(255,255,255,.28)}
 
 /* ═══════════════════════════════ PAGE ═══════════════════════════════ */
-.page{max-width:600px;margin:0 auto;padding:16px 14px 100px}
+.page{
+  width:100%;
+  max-width:680px;
+  margin:0 auto;
+  padding:14px 14px 100px;
+}
 
 /* ═══════════════════════════════ SECTION HEADER ═══════════════════════ */
 .sec{
@@ -173,8 +180,8 @@ body{
 .hd-green  .card-hd-icon{background:var(--green-lt)}
 
 /* ═══════════════════════════════ INPUTS ═══════════════════════════════ */
-.fg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.fg2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .fw{display:flex;flex-direction:column;gap:5px}
 .fl{font-size:12px;font-weight:600;color:var(--txt2);letter-spacing:.01em}
 .iw{position:relative}
@@ -210,7 +217,7 @@ body{
 .chip:hover,.chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 
 /* ═══════════════════════════════ FLUTE CARDS ═══════════════════════════ */
-.fc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .fc{
   border:2px solid var(--border);
   border-radius:var(--r-md);
@@ -250,7 +257,7 @@ body{
 }
 
 /* ═══════════════════════════════ GRADE CARDS ═══════════════════════════ */
-.gc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.gc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
 .gc{
   border:2px solid var(--border);
   border-radius:var(--r-md);
@@ -283,21 +290,22 @@ body{
 .gc.sel .gc-tag{background:var(--pink);color:#fff}
 
 /* 強度結果雙格 */
-.strength-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.strength-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
 .sg{
   border-radius:var(--r-md);
   padding:14px 13px;
   position:relative;overflow:hidden;
   border:.5px solid var(--border);
+  min-width:0;
 }
 .sg-burst{background:linear-gradient(135deg,rgba(255,59,48,.08),rgba(255,45,85,.06))}
 .sg-comp{background:linear-gradient(135deg,rgba(0,122,255,.08),rgba(88,86,214,.06))}
 [data-theme="dark"] .sg-burst{background:linear-gradient(135deg,rgba(255,69,58,.13),rgba(255,55,95,.09))}
 [data-theme="dark"] .sg-comp{background:linear-gradient(135deg,rgba(10,132,255,.13),rgba(94,92,230,.09))}
-.sg-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px}
+.sg-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
 .sg-burst .sg-lbl{color:var(--red)}
 .sg-comp .sg-lbl{color:var(--blue)}
-.sg-num{font-size:28px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.sg-num{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.02em;word-break:break-all}
 .sg-burst .sg-num{color:var(--red)}
 .sg-comp .sg-num{color:var(--blue)}
 .sg-unit{font-size:11px;color:var(--txt2);margin-top:3px}
@@ -312,22 +320,21 @@ body{
 
 /* 堆疊估算 */
 .stack-row{
-  display:flex;gap:10px;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;
   padding:12px 14px;
   background:var(--bg-input);
   border-radius:var(--r-sm);
   border:.5px solid var(--border);
-  align-items:center;
 }
-.stack-input{flex:1}
+.stack-input{min-width:0}
 .stack-result{
-  flex:1;
   background:var(--bg-card);
   border-radius:var(--r-xs);
   border:1px solid var(--border);
   padding:11px 12px;
   font-size:20px;font-weight:700;color:var(--blue);
   min-height:46px;display:flex;align-items:center;
+  word-break:break-all;
 }
 
 /* ═══════════════════════════════ RATE ═══════════════════════════════ */
@@ -432,7 +439,7 @@ body{
 }
 .rc-price sup{font-size:20px;font-weight:500;vertical-align:super;margin-right:1px}
 .rc-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
   margin-top:16px;position:relative;z-index:1;
 }
 .rc-cell{
@@ -491,18 +498,19 @@ body{
 .hl{color:var(--blue);font-weight:700}
 
 /* ═══════════════════════════════ TABLES ═══════════════════════════════ */
-.st{width:100%;border-collapse:collapse;font-size:13px}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -2px}
+.st{width:100%;border-collapse:collapse;font-size:13px;min-width:320px}
 .st th{
   text-align:left;padding:9px 10px;
   font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:var(--txt3);border-bottom:1.5px solid var(--border);
+  color:var(--txt3);border-bottom:1.5px solid var(--border);white-space:nowrap;
 }
-.st td{padding:11px 10px;border-bottom:.5px solid var(--border);color:var(--txt)}
+.st td{padding:11px 10px;border-bottom:.5px solid var(--border);color:var(--txt);font-size:13px}
 .st tr:last-child td{border-bottom:none}
 .st tr:hover td{background:var(--bg-input)}
 .badge{
   display:inline-block;padding:2px 9px;border-radius:6px;
-  font-size:11px;font-weight:700;
+  font-size:11px;font-weight:700;white-space:nowrap;
   background:var(--orange-lt);color:var(--orange);
 }
 
@@ -514,31 +522,77 @@ body{
 }
 
 /* ═══════════════════════════════ ANIMATIONS ═══════════════════════════ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.03)}100%{transform:scale(1)}}
-.card,.detail,.result-card{animation:fadeUp .4s cubic-bezier(.22,.68,0,1.2) both}
-.card:nth-child(1){animation-delay:.04s}
-.card:nth-child(2){animation-delay:.08s}
-.card:nth-child(3){animation-delay:.12s}
-.card:nth-child(4){animation-delay:.16s}
-.card:nth-child(5){animation-delay:.20s}
-.pop{animation:pop .24s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.025)}100%{transform:scale(1)}}
+.card{animation:fadeUp .38s cubic-bezier(.22,.68,0,1.1) both}
+.detail{animation:fadeUp .38s cubic-bezier(.22,.68,0,1.1) .22s both}
+.result-card{animation:fadeUp .42s cubic-bezier(.22,.68,0,1.1) .18s both}
+.pop{animation:pop .22s ease}
 
 /* ═══════════════════════════════ RESPONSIVE ═══════════════════════════ */
-@media(max-width:360px){
-  .rc-price{font-size:42px}
-  .fc-grid{grid-template-columns:1fr 1fr 1fr}
-  .rc-grid{grid-template-columns:1fr 1fr}
+
+/* 超小螢幕 320px */
+@media(max-width:359px){
+  .page{padding:10px 10px 90px}
+  .card{padding:14px 12px;border-radius:18px}
+  .rc-price{font-size:38px}
+  .sg-num{font-size:22px}
+  .nav{padding:0 12px}
+  .nav-title{font-size:15px}
+  .rate-wrap input{font-size:22px!important}
+  .fc-grid,.gc-grid{gap:6px}
+  .fc,.gc{padding:10px 7px 8px}
+  .fc-thick{font-size:18px}
+  .gc-kpa{font-size:14px}
 }
+
+/* 手機 360–539px */
+@media(min-width:360px) and (max-width:539px){
+  .rc-price{font-size:44px}
+}
+
+/* 平板直式 540–767px */
 @media(min-width:540px){
-  .page{padding:18px 18px 100px}
-  .rc-price{font-size:58px}
-  .fc-grid{grid-template-columns:repeat(6,1fr)}
-  .gc-grid{grid-template-columns:repeat(6,1fr)}
+  .page{padding:16px 20px 100px}
+  .rc-price{font-size:54px}
+  .fc-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .gc-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .card{padding:20px 20px}
+  .fc,.gc{padding:13px 11px 11px}
+  .fc-thick{font-size:22px}
+  .gc-kpa{font-size:17px}
+  .sg-num{font-size:30px}
 }
-@media(min-width:640px){
-  .page{max-width:620px}
-  .nav{padding:0 24px}
+
+/* 平板橫式 / 小型 PC 768px+ */
+@media(min-width:768px){
+  .page{padding:20px 24px 100px;max-width:720px}
+  .nav{padding:0 32px;height:62px}
+  .nav-title{font-size:18px}
+  .rc-price{font-size:60px}
+  .result-card{padding:26px 24px 22px}
+  .card{border-radius:26px}
+  .detail{border-radius:26px}
+  .rate-wrap input{font-size:30px!important}
+  .stepper button{width:58px;height:58px;font-size:28px}
+  .stepper input{font-size:22px!important}
+  .fg3{gap:12px}
+  .fg2{gap:12px}
+  .dr{padding:13px 18px;font-size:14px}
+  .dk,.dv{font-size:14px}
+}
+
+/* 寬螢幕 PC 1024px+ */
+@media(min-width:1024px){
+  body{padding-top:0}
+  .page{max-width:760px;padding:24px 32px 120px}
+  .nav-title{font-size:19px}
+  .sec-text{font-size:14px}
+  .card-hd-title{font-size:15px}
+  .fl{font-size:13px}
+  .rc-price{font-size:64px}
+  .sg-num{font-size:32px}
+  .fc-grid,.gc-grid{gap:10px}
 }
 </style>
 </head>
@@ -893,6 +947,7 @@ body{
 
 <div class="card">
   <div class="card-hd"><div class="card-hd-icon" style="background:var(--pink-lt)">🧻</div><div class="card-hd-title">紙質等級對照</div></div>
+  <div class="table-wrap">
   <table class="st">
     <thead><tr><th>等級</th><th>紙質</th><th>破裂強度</th><th>環壓強度</th><th>用途</th></tr></thead>
     <tbody>
@@ -904,10 +959,12 @@ body{
       <tr><td><span class="badge">W</span></td><td>廢紙漿</td><td>≥420 kPa</td><td>70</td><td>低成本</td></tr>
     </tbody>
   </table>
+  </div>
 </div>
 
 <div class="card">
   <div class="card-hd"><div class="card-hd-icon" style="background:var(--blue-lt)">🪵</div><div class="card-hd-title">楞型規格對照</div></div>
+  <div class="table-wrap">
   <table class="st">
     <thead><tr><th>楞型</th><th>楞高</th><th>面紙厚</th><th>特性</th></tr></thead>
     <tbody>
@@ -919,10 +976,12 @@ body{
       <tr><td>F/G楞</td><td>&lt;1 mm</td><td>0.2 mm</td><td>精細印刷</td></tr>
     </tbody>
   </table>
+  </div>
 </div>
 
 <div class="card">
   <div class="card-hd"><div class="card-hd-icon" style="background:var(--green-lt)">🎁</div><div class="card-hd-title">數量折扣方案</div></div>
+  <div class="table-wrap">
   <table class="st">
     <thead><tr><th>訂購量</th><th>折扣</th><th>係數</th></tr></thead>
     <tbody>
@@ -932,6 +991,7 @@ body{
       <tr><td>≥ 3,000 件</td><td>20% OFF</td><td>× 0.80</td></tr>
     </tbody>
   </table>
+  </div>
 </div>
 
 <div class="footer">
