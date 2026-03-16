@@ -651,8 +651,8 @@ body{
 <!-- ── 導覽列 ── -->
 <nav class="nav">
   <div class="nav-title">📦 瓦楞紙箱計算器</div>
-  <button class="theme-btn" onclick="toggleTheme()">
-    <span id="tIcon">🌙</span><span id="tLbl">深色</span>
+  <button class="theme-btn" onclick="toggleTheme()" style="padding:8px 10px;min-width:38px;justify-content:center">
+    <span id="tIcon" style="font-size:18px">🌙</span>
   </button>
 </nav>
 
@@ -1159,7 +1159,6 @@ function toggleTheme(){
   const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';
   h.setAttribute('data-theme',d?'light':'dark');
   document.getElementById('tIcon').textContent=d?'🌙':'☀️';
-  document.getElementById('tLbl').textContent=d?'深色':'淺色';
 }
 
 function selGrade(el){
