@@ -1239,14 +1239,14 @@ function calc(){
   const cai=unfL*unfW/918;
   const area=((L+W)*2+joint)/100*((W+H)*2)/100;
 
-  let df=1.0,discText='無折扣',pill='';
-  if(qty>=3000){df=0.80;discText='20% OFF (≥3000件)';pill='🏷 20% OFF';}
-  else if(qty>=1000){df=0.85;discText='15% OFF (≥1000件)';pill='🏷 15% OFF';}
-  else if(qty>=500){df=0.92;discText='8% OFF (≥500件)';pill='🏷 8% OFF';}
-
   const hasRate=!isNaN(rate)&&rate>0;
-  const unit=hasRate?area*rate*1.03*df:NaN;
+  const unit=hasRate?area*rate*1.03:NaN;
   const total=hasRate?unit*qty:NaN;
+
+  let pill='';
+  if(qty>=3000)pill='🏷 20% OFF';
+  else if(qty>=1000)pill='🏷 15% OFF';
+  else if(qty>=500)pill='🏷 8% OFF';
 
   let layerK=thick>=9?2.5:thick>=4?1.8:1.0;
   const burst=gradeData.burst*layerK;
